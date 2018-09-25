@@ -2,6 +2,8 @@
 
 namespace App\Exceptions;
 
+use App\Models\Util\ReturnJSON;
+use App\Models\Util\Utilidades;
 use Exception;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -33,6 +35,7 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $e)
     {
+
         parent::report($e);
     }
 
@@ -45,6 +48,20 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
+
+        if (Utilidades::isApi()){
+
+            $mensaje = $e->getMessage() == "" ? $e->getTraceAsString() : $e->getMessage();
+
+
+            if ($e instanceof ExepcionValidaciones != $e instanceof ValidationException){
+                return ReturnJSON::errorValidaciones($mensaje);
+            }
+
+            return ReturnJSON::error($mensaje);//response()->json(["estado"=>'error',"mensaje"=>$mensaje]);;
+        }
+
+
         return parent::render($request, $e);
     }
 }

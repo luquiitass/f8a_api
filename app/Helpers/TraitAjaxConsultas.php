@@ -44,7 +44,7 @@ trait TraitAjaxConsultas
 
     public function paginate($clase){
 
-        $collection = AjaxQuery::newModel($clase)->paginate(2);
+        $collection = AjaxQuery::newModel($clase)->paginate(9);
 
         return  ReturnJSON::success([$clase =>$collection]);
     }

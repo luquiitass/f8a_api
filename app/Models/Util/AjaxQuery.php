@@ -124,6 +124,22 @@ class AjaxQuery
         }
     }
 
+    public function setQuery_OrderBy_OfUrl(){
+
+        if (request()->has('orderByColumns') && request()->get('orderByDireccion') != '') {
+
+            $columns = explode(',', request()->get('orderByColumns'));
+            $dir = request()->get("orderByDireccion");
+
+            //dd($select);
+            foreach ($columns as $col){
+                $this->query->orderBy($col,$dir);
+
+            }
+
+        }
+    }
+
 
     public function setLoadInObject(){
         if (request()->has('load') && request()->get('load')!= ''){

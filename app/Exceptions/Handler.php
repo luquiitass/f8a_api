@@ -58,7 +58,7 @@ class Handler extends ExceptionHandler
                 return ReturnJSON::errorValidaciones($mensaje);
             }
 
-            return ReturnJSON::error($mensaje);//response()->json(["estado"=>'error',"mensaje"=>$mensaje]);;
+            return ReturnJSON::errorServer($e);//response()->json(["estado"=>'error',"mensaje"=>$mensaje]);;
         }
 
 

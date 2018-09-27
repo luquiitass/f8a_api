@@ -43,6 +43,14 @@ class ReturnJSON
 
     }
 
+    public static function errorServer(\Exception $error){
+        //\Log::error("Error Server",$error->getMessage());
+        $retorno = array();
+        $retorno["estado"]="error";
+        $retorno["mensaje"]=$error->getMessage();
+        return response()->json($retorno);
+    }
+
 
     public static function error($msj){
         $retorno = array();

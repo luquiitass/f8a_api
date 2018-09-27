@@ -12,5 +12,11 @@ class ClienteTableSeeder extends Seeder
     public function run()
     {
         //
+        DB::table('clientes')->insert([
+            'nombre'=>str_random(10),
+            'apellido'=>str_random(10),
+            'telefono'=>str_random(8),
+            'dni'=>str_random(10)
+        ]);
     }
 }

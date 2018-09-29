@@ -15,4 +15,14 @@ class Utilidades
         return str_contains(request()->url(),'/api/');
     }
 
+    public static function isBase64($base64)
+    {
+        return base64_decode($base64,true) === true;
+    }
+
+    public static function notIsLinkImage($fotoPerfil)
+    {
+        return count_chars($fotoPerfil) > 100;
+    }
+
 }

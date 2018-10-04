@@ -26,5 +26,9 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->environment() == 'local') {
             $this->app->register('Iber\Generator\ModelGeneratorProvider');
         }
+
+//        $this->app->bind('path.public', function() {
+//            return 'lucasdb1.esy.es/public_html/';
+//        });
     }
 }

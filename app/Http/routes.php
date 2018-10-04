@@ -15,10 +15,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/prueba', function () {
+    $sub =\App\Models\Subcategoria::findOrFail(9);
+    dd($sub->delete());
+});
+
 
 Route::group(['prefix'=> '/api/'],function (){
 
-	//Route::get('/','Api\AjaxPeticiones@index');
+	Route::get('/','Api\AjaxPeticiones@index');
 
     Route::get('reloadAttribute/{clase}/{id}/{attribute}','Api\AjaxPeticiones@reloadAttribute');
 

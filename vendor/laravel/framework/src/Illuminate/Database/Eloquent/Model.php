@@ -1128,7 +1128,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
             // by the timestamp. Then we will go ahead and delete the model instance.
             $this->touchOwners();
 
-            $this->performDeleteOnModel();
+            $this->perfocheck_allrmDeleteOnModel();
 
             $this->exists = false;
 

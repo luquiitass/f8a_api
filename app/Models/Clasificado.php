@@ -14,16 +14,28 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Cliente
  */
-class Imagen extends Model
+class Clasificado extends Model
 {
 
-    protected $table = 'imagenes';
+    public $directorioImagen = "imagenes/clasificados/";
+
+    protected $table = 'clasificados';
 
     public $timestamps = true;
 
     protected $fillable = [
         'nombre',
-        'url'
+        'descripcion',
+        'precio',
+        'trlefono',
+        'vencimiento',
+        'prioridad',
+        'nuevo',
+        'permuto',
+        'venta',
+        'cliente_id',
+        'localidad_id',
+        'subcategoria_id'
     ];
 
 
@@ -33,30 +45,21 @@ class Imagen extends Model
     public static function create(array $attributes = [])
     {
 
+
         $model = parent::create($attributes);
+
 
         return $model;
     }
 
     public function update(array $attributes = [], array $options = [])
     {
+
         $model =  parent::update($attributes, $options);
 
         return $model;
     }
 
-    public static function createFotoPerfil($path, $request){
-        
-    }
-
-
-    public static function generarNombre($path){
-        $nombre = str_random(15);
-        if (file_exists($path . $nombre)){
-            return self::generarNombre($path);
-        }
-        return $nombre;
-    }
 
         
 }

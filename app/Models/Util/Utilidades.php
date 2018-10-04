@@ -20,9 +20,9 @@ class Utilidades
         return base64_decode($base64,true) === true;
     }
 
-    public static function notIsLinkImage($fotoPerfil)
+    public static function isLinkImage($fotoPerfil)
     {
-        return count_chars($fotoPerfil) > 100;
+        return strlen($fotoPerfil) < 40;
     }
 
 }

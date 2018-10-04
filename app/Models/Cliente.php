@@ -61,18 +61,26 @@ class Cliente extends Model
 
     public function guardarFotoPerfil($attributes){
 
-        if (!empty($attributes['fotoPerfil']) && Utilidades::notIsLinkImage($attributes['fotoPerfil'])){
-            $imagen = $attributes['fotoPerfil'];
-            $path = $this->directorioImagen;
-            $nombre =str_random(10);
-             return UtilImagenes::saveImageBase64($imagen,$path,$nombre);
-            \Log::alert("Cliente",['Cliente'=>'Si es base 64 ']);
-        }else{
-            \Log::alert("Cliente",['Cliente'=>'no es una base 64']);
+        if (!empty($attributes['fotoPerfil'])){
 
+            if (  !Utilidades::isLinkImage($attributes['fotoPerfil']) ){
+
+                $this->eliminarFoto();
+                $imagen = $attributes['fotoPerfil'];
+                $path = $this->directorioImagen;
+                $nombre =str_random(10);
+                return UtilImagenes::saveImageBase64($imagen,$path,$nombre);
+            }
         }
-        return null;
 
+        return $this->fotoPerfil;
+
+    }
+
+    public function eliminarFoto(){
+        if (file_exists( public_path( $this->fotoPerfil) )){
+           unlink(public_path($this->fotoPerfil));
+        }
     }
 
 

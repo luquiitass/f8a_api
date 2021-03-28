@@ -3,10 +3,14 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
-use Validator;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginRequest;
+use Auth;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+
+
+
 
 class AuthController extends Controller
 {
@@ -37,7 +41,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware($this->guestMiddleware(), ['except' => 'logout']);
+        $this->middleware($this->guestMiddleware(), ['except' => 'logout','login']);
     }
 
     /**
@@ -48,11 +52,12 @@ class AuthController extends Controller
      */
     protected function validator(array $data)
     {
-        return Validator::make($data, [
+        /*return Validator::make($data, [
             'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|min:6|confirmed',
         ]);
+        */
     }
 
     /**
@@ -69,4 +74,23 @@ class AuthController extends Controller
             'password' => bcrypt($data['password']),
         ]);
     }
+
+    public function login(LoginRequest $request) {
+        
+        $credentials = $request->all();
+        
+        if(!Auth::guard('api')->attempt($credentials))
+            return response()->json([
+                'message' => 'Unauthorized'
+            ], 401);
+
+        $user = $request->user();
+
+        return response()->json([
+            'User' => $user,
+            'api_token' => $user->api_token
+        ]);
+    }
+
+
 }

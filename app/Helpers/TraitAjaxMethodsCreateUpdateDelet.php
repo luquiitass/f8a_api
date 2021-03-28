@@ -10,6 +10,9 @@ namespace App\Helpers;
 
 
 use App\Models\Util\ReturnJSON;
+use Exception;
+use Illuminate\Support\Facades\DB;
+use SebastianBergmann\Environment\Console;
 
 trait TraitAjaxMethodsCreateUpdateDelet
 {
@@ -47,6 +50,9 @@ trait TraitAjaxMethodsCreateUpdateDelet
 
         $object->update($inputs);
 
+        $object = $this->getExistObject($model); //$object->fresh();
+        //return $object->with;
+
         return ReturnJSON::successUpdate(array($className => $object ));
 
 
@@ -58,7 +64,14 @@ trait TraitAjaxMethodsCreateUpdateDelet
 
         $object = $this->getExistObject($model);
 
-        $object->delete();
+        try{
+            $object->delete();
+        }catch(Exception $e){
+            //return  $e->getMessage();
+
+        }
+
+        $this->remove($object);
 
         return ReturnJSON::success(array($className => $object ));
 
@@ -71,7 +84,7 @@ trait TraitAjaxMethodsCreateUpdateDelet
 
             $id = request()->id;
 
-            $object = $model::find($id);
+            $object = $model::findOrFail($id);
 
             if ($object){
 
@@ -103,6 +116,10 @@ trait TraitAjaxMethodsCreateUpdateDelet
             throw new \Exception("No existe el Modelo " . $clase);
 
         }
+    }
+
+    public function remove($object){
+        DB::table($object['table'])->where('id', $object->id)->delete();
     }
 
 }

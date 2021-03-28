@@ -168,6 +168,10 @@ class AjaxQuery
         return $this->query->paginate($num);
     }
 
+    public function runFunction($function){
+        return $this->model->$function();
+    }
+
     public function toString(){
         return $this->model->attributes;
     }

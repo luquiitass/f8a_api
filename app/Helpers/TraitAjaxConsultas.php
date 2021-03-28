@@ -3,9 +3,10 @@
 
 namespace App\Helpers;
 
-
+use App\Http\Requests\LoginRequest;
 use App\Models\Util\AjaxQuery;
 use App\Models\Util\ReturnJSON;
+use Auth;
 
 /**
  * Created by PhpStorm.
@@ -49,5 +50,38 @@ trait TraitAjaxConsultas
         return  ReturnJSON::success([$clase =>$collection]);
     }
 
+    public function runFunction($clase,$function)
+    {
+        $retorno = AjaxQuery::newModel($clase)->runFunction($function);
+
+        return  ReturnJSON::success(["data" => $retorno]);
+        
+    }
+
+    public function runFunctionModel($clase,$id,$function)
+    {
+        $retorno = AjaxQuery::newObject($clase,$id)->$function();
+
+        return  ReturnJSON::success(["data" => $retorno]);
+        
+    }
+
+    public function login(LoginRequest $request) {
+        
+        $credentials = $request->all();
+        
+        if(!Auth::attempt($credentials))
+            return response()->json([
+                'message' => 'Unauthorized d'
+            ], 401);
+
+        $user = $request->user();
+
+        return response()->json([
+            'status' => 'success',
+            'User' => $user,
+            'api_token' => $user->api_token
+        ]);
+    }
 
 }

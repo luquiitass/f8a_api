@@ -11,6 +11,7 @@ class AjaxPeticiones extends ApiController
 
     use TraitAjaxConsultas,TraitAjaxMethodsCreateUpdateDelet;
 
+
     public function index(){
         return response()->json("Bienvenido a la api");
     }

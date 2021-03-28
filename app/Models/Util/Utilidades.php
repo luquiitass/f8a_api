@@ -12,7 +12,7 @@ namespace App\Models\Util;
 class Utilidades
 {
     public static function isApi(){
-        return str_contains(request()->url(),'/api/');
+        return str_contains(request()->url(),'/api/') ||  str_contains(request()->url(),'/api2/') ;
     }
 
     public static function isBase64($base64)

@@ -23,6 +23,18 @@ class Team extends Model
 
     protected $guarded = [];
 
+    public function getIsFavoriteAttribute(){
+            return $this->isFavorite = ! empty($this->favorite);
+    }
+
+    public function favorite(){
+        return $this->hasOne(Favorite::class,'table_id','id');
+    }
+
+    public function comments(){
+        return $this->belongsToMany(Comment::class);
+    }
+
     public static function create(array $attributes = [])
     {
 
@@ -85,7 +97,12 @@ class Team extends Model
         return self::select('id','name')->orderBy('name')->get();
     }
 
-    
+    public function pageProfile(){
+        $this->getIsFavoriteAttribute();
+        $this->players;
+        $this->comments;
+        return $this;
+    }
 
 
     //provate

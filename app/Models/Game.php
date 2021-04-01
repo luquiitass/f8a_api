@@ -28,6 +28,10 @@ class Game extends Model
     public $with = ['team_l','team_v','events'];
     protected $guarded = [];
 
+    public function comments(){
+        return $this->belongsToMany(Comment::class);
+    }
+
     public function team_l()
     {
         return $this->belongsTo(Team::class,'l_team','id');

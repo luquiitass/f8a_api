@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -22,7 +23,8 @@ class Game extends Model
         'status',
         'time',
         'location',
-        'description'
+        'description',
+        'date'
     ];
 
     public $with = ['team_l','team_v','events'];
@@ -44,6 +46,7 @@ class Game extends Model
     public function events(){
         return $this->hasMany(Event::class)->with('typeEvent','player','team');
     }
+
 
 
     public static function create(array $attributes = [])
@@ -83,6 +86,119 @@ class Game extends Model
     public function results()
     {
         return self::query()->where('status','Jugado')->get();
+    }
+
+    public function gamesByDate(){
+        $date = request()->get('date');
+        return $this->getGamesByDate($date);
+    }
+
+    public function getGamesByDate($date){
+        return self::query()
+            ->where('date',$date)
+            ->where(function($query)
+            {
+                return $query->where('status','Pendiente')
+                    ->OrWhere('status','Suspendido');
+            })
+            ->orderBy('time')
+            ->get();
+    }
+
+
+    public function pageHomeGames(){
+        $now = Carbon::now();
+        $dateEnd = Carbon::now()->addMonth(1);
+       // return [$now , $dateEnd];
+        
+        $dates = self::select('date')
+                ->where('date', '>=' ,$now)
+                ->where('date', '<=' ,$dateEnd)
+                ->where(function($query)
+                {
+                    return $query->where('status','Pendiente')
+                        ->OrWhere('status','Suspendido');
+                })
+                ->groupBy('date')
+                ->orderBy('date')
+                ->get();
+
+        $index = count($dates) - 1;
+
+        $results = [];
+        $lastDate = Carbon::now();
+
+        if($index >= 0 ){
+            $lastDate = $dates[$index];
+            $results = $this->getGamesByDate($lastDate->date);
+            $dates[$index]['results'] = $results;
+        }
+
+        
+        $data = [
+            'dates' => $dates,
+        ];
+
+        return $data;
+    }
+    
+    
+    
+    
+    
+    
+    public function resultsByDate(){
+        $date = request()->get('date');
+        return $this->getResultsByDate($date);
+    }
+
+    public function getResultsByDate($date){
+        return self::query()
+            ->where('date',$date)
+            ->where(function($query)
+            {
+                return $query->where('status','Jugado')
+                    ->OrWhere('status','Suspendido');
+            })
+            ->orderBy('time')
+            ->get();
+    }
+
+
+    public function pageHomeResults(){
+        $now = Carbon::now();
+        $dateInit = Carbon::now()->addMonth(-1);
+        //return $dateInit;
+        
+        $dates = self::select('date')
+                ->where('date', '<=' ,$now)
+                ->where('date', '>=' ,$dateInit)
+                ->where(function($query)
+                {
+                    return $query->where('status','Jugado')
+                        ->OrWhere('status','Suspendido');
+                })
+                ->groupBy('date')
+                ->orderBy('date')
+                ->get();
+
+        $index = count($dates) - 1;
+
+        $results = [];
+        $lastDate = Carbon::now();
+
+        if($index >= 0 ){
+            $lastDate = $dates[$index];
+            $results = $this->getResultsByDate($lastDate->date);
+            $dates[$index]['results'] = $results;
+        }
+
+        
+        $data = [
+            'dates' => $dates,
+        ];
+
+        return $data;
     }
 
 

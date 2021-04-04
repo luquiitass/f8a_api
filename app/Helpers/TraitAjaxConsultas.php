@@ -72,7 +72,7 @@ trait TraitAjaxConsultas
         
         if(!Auth::attempt($credentials))
             return response()->json([
-                'message' => 'Unauthorized d'
+                'message' => 'Unauthorizedd'
             ], 401);
 
         $user = $request->user();

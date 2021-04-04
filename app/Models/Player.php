@@ -115,4 +115,8 @@ class Player extends Model
         
         return $data;
     }
+
+    public function pageHomePlayers(){
+        return self::get();
+    }
 }

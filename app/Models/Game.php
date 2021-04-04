@@ -134,7 +134,6 @@ class Game extends Model
             $dates[$index]['results'] = $results;
         }
 
-        
         $data = [
             'dates' => $dates,
         ];

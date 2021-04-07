@@ -96,6 +96,7 @@ class Game extends Model
     public function getGamesByDate($date){
         return self::query()
             ->where('date',$date)
+            ->withCount(['comments'])
             ->where(function($query)
             {
                 return $query->where('status','Pendiente')
@@ -142,10 +143,42 @@ class Game extends Model
     }
     
     
+    public function adminByDate(){
+        $date = request()->get('date');
+        return $this->adminGetByDate($date);
+    }
+
+    public function adminGetByDate($date){
+        return self::query()
+            ->where('date',$date)
+            ->orderBy('time')
+            ->get();
+    }
+
+
+    public function pageAdminAll(){
+        $dateInit = Carbon::now()->addMonth(-1);
+        $now = Carbon::now();
+        $dateEnd = Carbon::now()->addMonth(1);
+        //return $dateInit;
+        
+        $dates = self::select('date')
+                ->where('date', '>=' ,$dateInit)
+                ->where('date', '<=' ,$dateEnd)
+                ->groupBy('date')
+                ->orderBy('date')
+                ->get();
+
+        
+        $data = [
+            'dates' => $dates,
+        ];
+
+        return $data;
+    }
     
     
-    
-    
+    //Dates of Results
     public function resultsByDate(){
         $date = request()->get('date');
         return $this->getResultsByDate($date);
@@ -154,6 +187,7 @@ class Game extends Model
     public function getResultsByDate($date){
         return self::query()
             ->where('date',$date)
+            ->withCount(['comments'])
             ->where(function($query)
             {
                 return $query->where('status','Jugado')
@@ -162,7 +196,6 @@ class Game extends Model
             ->orderBy('time')
             ->get();
     }
-
 
     public function pageHomeResults(){
         $now = Carbon::now();

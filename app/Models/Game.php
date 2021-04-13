@@ -124,7 +124,7 @@ class Game extends Model
                 ->orderBy('date')
                 ->get();
 
-        $index = count($dates) - 1;
+        $index = 0;
 
         $results = [];
         $lastDate = Carbon::now();

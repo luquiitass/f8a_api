@@ -29,7 +29,7 @@ class Image extends Model
         'thumb'=>'boolean',
     ];
 
-    protected $appends = ['urlComplete'];
+    protected $appends = ['urlComplete','urlCompleteThumb'];
 
     protected $guarded = [];
 
@@ -43,6 +43,10 @@ class Image extends Model
 
     public function getUrlCompleteAttribute(){
         return   URL::to($this->url)   . '/' .  $this->name;
+    }
+
+    public function getUrlCompleteThumbAttribute(){
+        return   URL::to($this->url . 'thumb')   . '/' .  $this->name;
     }
 
 

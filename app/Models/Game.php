@@ -110,11 +110,11 @@ class Game extends Model
     public function pageHomeGames(){
         $now = Carbon::now();
         $dateEnd = Carbon::now()->addMonth(1);
-       // return [$now , $dateEnd];
+        //return [$now , $dateEnd];
         
         $dates = self::select('date')
-                ->where('date', '>=' ,$now)
-                ->where('date', '<=' ,$dateEnd)
+                ->where('date', '>=' ,$now->format('Y-m-d'))
+                ->where('date', '<=' ,$dateEnd->format('Y-m-d'))
                 ->where(function($query)
                 {
                     return $query->where('status','Pendiente')
@@ -129,7 +129,7 @@ class Game extends Model
         $results = [];
         $lastDate = Carbon::now();
 
-        if($index >= 0 ){
+        if( count( $dates ) ){
             $lastDate = $dates[$index];
             $results = $this->getGamesByDate($lastDate->date);
             $dates[$index]['results'] = $results;
@@ -203,8 +203,8 @@ class Game extends Model
         //return $dateInit;
         
         $dates = self::select('date')
-                ->where('date', '<=' ,$now)
-                ->where('date', '>=' ,$dateInit)
+                ->where('date', '<=' ,$now->format('Y-m-d'))
+                ->where('date', '>=' ,$dateInit->format('Y-m-d'))
                 ->where(function($query)
                 {
                     return $query->where('status','Jugado')

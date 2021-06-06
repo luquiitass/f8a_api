@@ -22,7 +22,8 @@ class Player extends Model
         'height',
         'weight',
         'position_id',
-        'photo_id'
+        'photo_id',
+        'user_id'
     ];
 
     protected $with = ['photo'];
@@ -39,7 +40,7 @@ class Player extends Model
     }
 
     public function getTeamAttribute(){
-         return $this->teams()->wherePivot('current',1)->first();
+         return $this->team = $this->teams()->wherePivot('current',1)->first();
     }
 
     public function position(){
@@ -111,6 +112,7 @@ class Player extends Model
         $this->countYellow();
         $this->countAssistance();
         $this->countRed();
+        $this->team;
         $data = $this->load('photo','position','events');
         
         return $data;

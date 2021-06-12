@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Models\Image;
+use App\Models\Notification;
 use App\Models\Player;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Models\Team;
@@ -49,7 +50,13 @@ class User extends Authenticatable
         return $this->belongsTo(Image::class,'photo_id');
     }
 
+    public function notifications(){
+        return $this->hasMany(Notification::class)->orderBy('id','desc');
+    }
    
+    public function getCompleteNameAttribute(){
+        return $this->last_name .' '. $this->first_name;
+    }
 
     public static function create(array $attributes = [])
     {
@@ -60,6 +67,8 @@ class User extends Authenticatable
         $model = parent::create($attributes);
 
         $model->savePhoto($attributes);
+
+        $model->load('user','image');
 
         return $model;
     }
@@ -123,6 +132,18 @@ class User extends Authenticatable
    }
 
 
+
+   public function dataGlobal()
+   {
+       $user = Auth::guard('api')->user();
+       
+       $user->notifications;
+       $user->teams;
+       $user->player;
+
+       return $user;
+   }
+
    function searchUser(){
        $text = request()->get('text');
 
@@ -143,4 +164,24 @@ class User extends Authenticatable
 
        return $user;
    }
+
+
+   function pageNotifications(){
+       return $this->notifications;
+   }
+
+
+   //Funciones del Objeto
+
+   public function increaseNotifications(){
+       $this->counts_not += 1;
+       $this->save();
+   }
+
+   public function resetNotifications(){
+    $this->counts_not  = 0;
+    $this->save();
+   }
+
+
 }

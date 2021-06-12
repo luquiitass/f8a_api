@@ -45,6 +45,25 @@ class Comment extends Model
 
         $relaModel->comments()->attach($comment->id);
 
+        if($inputs['nameRelationModel'] == 'Publication'){
+
+            $contentNotification = [
+                'autor_name' => $comment->user->completeName,
+                'autor_image' =>$comment->user->photo ? $comment->user->photo->urlCompleteThumb : '' 
+            ];
+
+
+            $data = [
+                'user_id' => $relaModel->user->id,
+                'content' => json_encode($contentNotification),
+                'content_id' => $relaModel->id,
+                'route' => '/publication/' . $relaModel->id .'/comments',
+                'type' => 'comment_publication'
+            ];
+
+            Notification::create($data);
+        }
+
         return $comment;
     }
 

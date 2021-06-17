@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Auth;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -26,7 +27,7 @@ class Player extends Model
         'user_id'
     ];
 
-    protected $with = ['photo'];
+    protected $with = ['photo','position'];
 
 
     protected $guarded = [];
@@ -61,16 +62,18 @@ class Player extends Model
 
         $model->addPlayer($attributes);
 
-
         return $model;
     }
 
     public function update(array $attributes = [], array $options = [])
     {
 
-        $model =  parent::update($attributes, $options);
+        $model = parent::update($attributes, $options);
 
-        return $model;
+        //$this->position;
+        //$this->al = 'algo';
+
+        return $this->profile();
     }
     
     public function delete()
@@ -82,6 +85,7 @@ class Player extends Model
         
         if( ! empty($attributes['team_id']) ){
             $this->teams()->attach($attributes['team_id']);
+            $this->sendNotification();
         }
 
         $this->team;
@@ -121,4 +125,28 @@ class Player extends Model
     public function pageHomePlayers(){
         return self::get();
     }
+
+
+    public function sendNotification(){
+
+        $user = Auth::guard('api')->user();
+
+        if( $user->id != $this->user_id){
+
+            $dataPublication = [
+                'type' => 'create_player',
+                'user_id' => $this->user_id,
+                'title' => '',
+                'route' => '/player/profile/' . $this->id,
+                'content' => 'Player',
+                'content_id' => $this->id,
+                'autor_table' => 'Team',
+                'autor_id' => $this->team->id
+            ];
+
+            Notification::create($dataPublication);
+
+        }
+
+    } 
 }

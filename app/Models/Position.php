@@ -34,7 +34,8 @@ class Position extends Model
 
         $model =  parent::update($attributes, $options);
 
-        return $model;
+
+        return $this;
     }
     
     public function delete()

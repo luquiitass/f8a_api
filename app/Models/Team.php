@@ -118,4 +118,8 @@ class Team extends Model
         }
     }
 
+    public function pageHomeTeams(){
+        return $this->orderBy('name','asc')->get();
+    }
+
 }

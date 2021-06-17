@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Util\AjaxQuery;
 use Illuminate\Database\Eloquent\Model;
 
 
@@ -20,14 +21,17 @@ class Notification extends Model
         'route',
         'title',
         'content',
+        'content_id',
         'isShow',
         'created_at',
         'updated_at',
         'user_id',
-        'content_id',
-        'type'
+        'type',
+        'autor_id',
+        'autor_table'
     ];
 
+    protected $appends = ['autor','object'];
 
     protected $guarded = [];
 
@@ -35,9 +39,18 @@ class Notification extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function getAutorAttribute(){
+        return AjaxQuery::newObject($this->autor_table,$this->autor_id);
+    }
+
+    public function getObjectAttribute(){
+        return AjaxQuery::newObject($this->content,$this->content_id);
+    }
+
 
     public static function create(array $attributes = [])
     {
+        \Log::info('create Not');
 
 
         $model = parent::create($attributes);

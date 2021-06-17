@@ -27,6 +27,8 @@ class User extends Authenticatable
 
     protected $with = ['photo'];
 
+    protected $appends = ['completeName'];
+
 
     /**
      * The attributes that should be hidden for arrays.
@@ -68,7 +70,7 @@ class User extends Authenticatable
 
         $model->savePhoto($attributes);
 
-        $model->load('user','image');
+        $model->load('photo');
 
         return $model;
     }
@@ -90,7 +92,6 @@ class User extends Authenticatable
 
     public function delete()
     {
-        \Log::info('methods delete team');
 
         if($this->photo_id){
             $this->photo->delete();
@@ -175,6 +176,7 @@ class User extends Authenticatable
 
    public function increaseNotifications(){
        $this->counts_not += 1;
+       \Log::info('increment not 1 in user');
        $this->save();
    }
 
@@ -182,6 +184,8 @@ class User extends Authenticatable
     $this->counts_not  = 0;
     $this->save();
    }
+
+   
 
 
 }

@@ -48,9 +48,9 @@ trait TraitAjaxMethodsCreateUpdateDelet
 
         $object = $this->getExistObject($model);
 
-        $object->update($inputs);
+        $object = $object->update($inputs);
 
-        $object = $this->getExistObject($model); //$object->fresh();
+        //$object = $this->getExistObject($model); //$object->fresh();
         //return $object->with;
 
         return ReturnJSON::successUpdate(array($className => $object ));

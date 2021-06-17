@@ -67,6 +67,27 @@ class Publication extends Model
         return $model;
     }
 
+    public function update(array $attributes = [], array $options = [])
+    {
+
+        $model =  parent::update($attributes, $options);
+
+        $this->saveImage($attributes);
+        $this->load('image','comments','likes');
+        $this->comments_count = $this->comments->count();
+        $this->likes_count = $this->likes->count();
+        $this->liked;
+
+        return $this;
+    }
+
+    public function delete()
+    {
+        if($this->image_id){
+            $this->image->delete();
+        }
+    }
+
 
     public function saveImage($attributes)
     {
@@ -136,18 +157,15 @@ class Publication extends Model
                 $route = $route . '/likes';
             }
 
-            $content = [
-                'autor_name' => $user->completeName,
-                'autor_image' => $user->photo->urlCompleteThumb,
-            ];
-
             $data = [
               'title' => $typeNotification,
               'route' => $route,
               'content_id' => $this->id,
-              'content' => json_encode($content),
+              'content' => 'Publication',
               'type' => $typeNotification,
-              'user_id' => $this->user->id
+              'user_id' => $this->user->id,
+              'autor_table' => 'User',
+              'autor_id' => $user->id
             ];
 
             $not = Notification::create($data);

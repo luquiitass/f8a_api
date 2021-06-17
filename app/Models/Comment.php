@@ -44,19 +44,21 @@ class Comment extends Model
         $relaModel = AjaxQuery::newObject($inputs['nameRelationModel'],$inputs['idRelation']);
 
         $relaModel->comments()->attach($comment->id);
+        \Log::info('pre noti',[
+            'rela' => $inputs['nameRelationModel'],
+            'userComment' => $comment->user,
+            'auserAith' => $user
+        ]);
 
-        if($inputs['nameRelationModel'] == 'Publication'){
-
-            $contentNotification = [
-                'autor_name' => $comment->user->completeName,
-                'autor_image' =>$comment->user->photo ? $comment->user->photo->urlCompleteThumb : '' 
-            ];
-
+        if($inputs['nameRelationModel'] == 'Publication' && $user->id != $relaModel->user_id){
+            \Log::info('add not by comment');
 
             $data = [
                 'user_id' => $relaModel->user->id,
-                'content' => json_encode($contentNotification),
+                'content' => 'Publication',
                 'content_id' => $relaModel->id,
+                'autor_table' => 'User',
+                'autor_id' => $user->id,
                 'route' => '/publication/' . $relaModel->id .'/comments',
                 'type' => 'comment_publication'
             ];

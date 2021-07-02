@@ -44,7 +44,7 @@ class Game extends Model
     }
 
     public function events(){
-        return $this->hasMany(Event::class)->with('typeEvent','player','team');
+        return $this->hasMany(Event::class)->with('typeEvent','player','team')->orderBy('time','asc');
     }
 
 

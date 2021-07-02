@@ -33,10 +33,18 @@ Route::get('/login', function () {
 Route::group(['prefix'=> '/api/'],function (){
 
     Route::post('login','Api\AjaxPeticiones@login');
+    
     Route::any('methods/User/create',function(){
         $ctr = new AjaxPeticiones();
         return $ctr->methods('User','Create');
     });// Clase = nombre de la clase , funcion = Create ,Update ,Delete
+
+    Route::any('methods/Error/create',function(){
+        $ctr = new AjaxPeticiones();
+        return $ctr->methods('Error','Create');
+    });// Clase = nombre de la clase , funcion = Create ,Update ,Delete
+
+    
 
 
     Route::group(['middleware' => ['auth:api']],function (){

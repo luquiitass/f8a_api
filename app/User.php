@@ -5,6 +5,7 @@ namespace App;
 use App\Models\Image;
 use App\Models\Notification;
 use App\Models\Player;
+use App\Models\Publication;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Models\Team;
 use App\Models\User as ModelsUser;
@@ -45,6 +46,10 @@ class User extends Authenticatable
 
     public function player(){
         return $this->hasOne(Player::class);
+    }
+
+    public function publications(){
+        return $this->hasMany(Publication::class)->withCount('comments','likes');
     }
 
     public function photo()
@@ -153,6 +158,7 @@ class User extends Authenticatable
                     ->orWhere('first_name','like',$text . '%' )
                     ->orWhere('last_name','like',$text . '%' )
                     ->select(DB::raw('CONCAT(last_name," ", first_name ," (" ,email ,")" ) AS text ,id'))
+                    ->with('player')
                     ->get();
    }
 
@@ -164,6 +170,11 @@ class User extends Authenticatable
         $user->player;
 
        return $user;
+   }
+
+   public function profilePage(){
+    $this->load('publications');    
+    return $this;    
    }
 
 

@@ -53,7 +53,10 @@ class Team extends Model
 
         $this->updateAdmins($attributes);
 
-        return $model;
+        $this->shield;
+        $this->coverPage;
+
+        return $this;
     }
     
     public function delete()
@@ -104,6 +107,13 @@ class Team extends Model
         return $this;
     }
 
+    public function removePlayer()
+    {
+        $player_id = request()->get('player_id');
+        $this->players()->detach($player_id);
+        # code...
+        return 'ok';
+    }
 
     //provate
     private function updateAdmins($attributes){
@@ -113,6 +123,7 @@ class Team extends Model
             $ids = [];
             foreach($admins as $admin){
                 $ids[] = $admin['id']; 
+                $this->sendNotification($admin['id']);
             }
             $this->admins()->sync($ids);
         }
@@ -120,6 +131,23 @@ class Team extends Model
 
     public function pageHomeTeams(){
         return $this->orderBy('name','asc')->get();
+    }
+
+
+    public function sendNotification($admin_id)
+    {
+        $dataPublication = [
+            'type' => 'admin_team',
+            'user_id' => $admin_id,
+            'title' => '',
+            'route' => '/team/profile/' . $this->id,
+            'content' => 'Team',
+            'content_id' => $this->id,
+            'autor_table' => 'Team',
+            'autor_id' => $this->id
+        ];
+
+        Notification::create($dataPublication);
     }
 
 }

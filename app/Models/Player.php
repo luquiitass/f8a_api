@@ -27,17 +27,21 @@ class Player extends Model
         'user_id'
     ];
 
-    protected $with = ['photo','position'];
+    protected $with = ['user','photo','position'];
 
 
     protected $guarded = [];
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 
     public function photo(){
         return $this->belongsTo(Image::class);
     }
 
     public function teams(){
-        return $this->belongsToMany(Team::class);
+        return $this->belongsToMany(Team::class)->withPivot(['current'])->withTimestamps();
     }
 
     public function getTeamAttribute(){
@@ -70,6 +74,9 @@ class Player extends Model
 
         $model = parent::update($attributes, $options);
 
+        $this->sendNotification();
+        //$this->addPlayer($attributes);
+
         //$this->position;
         //$this->al = 'algo';
 
@@ -87,7 +94,18 @@ class Player extends Model
             $this->teams()->attach($attributes['team_id']);
             $this->sendNotification();
         }
+        $this->team;
+    }
 
+    public function addToTeam($team_id){
+        $team = $this->team;
+        if($team){
+            $team->pivot->current =  0 ;
+            $team->pivot->save();
+            $this->sendNotificationChangeTeam($team,$team_id);
+        }
+
+        $this->teams()->attach($team_id);
         $this->team;
     }
 
@@ -131,7 +149,7 @@ class Player extends Model
 
         $user = Auth::guard('api')->user();
 
-        if( $user->id != $this->user_id){
+        if($this->user_id && $user->id != $this->user_id){
 
             $dataPublication = [
                 'type' => 'create_player',
@@ -147,6 +165,24 @@ class Player extends Model
             Notification::create($dataPublication);
 
         }
-
     } 
+
+    public function sendNotificationChangeTeam($oldTeam,$newTeam_id){
+
+        foreach($oldTeam->admins as $admin){
+            $dataPublication = [
+                'type' => 'player_change_team',
+                'user_id' => $admin->id,
+                'title' => '',
+                'route' => '/player/profile/' . $this->id,
+                'content' => 'Player',
+                'content_id' => $this->id,
+                'autor_table' => 'Team',
+                'autor_id' => $newTeam_id
+            ];
+
+            Notification::create($dataPublication);
+
+        }
+    }
 }

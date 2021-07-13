@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Util\AjaxQuery;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 
 
@@ -40,11 +41,19 @@ class Notification extends Model
     }
 
     public function getAutorAttribute(){
-        return AjaxQuery::newObject($this->autor_table,$this->autor_id);
+        try{
+            return AjaxQuery::newObject($this->autor_table,$this->autor_id);
+        }catch(Exception $e){
+            return null;
+        }
     }
 
     public function getObjectAttribute(){
-        return AjaxQuery::newObject($this->content,$this->content_id);
+        try{
+            return AjaxQuery::newObject($this->content,$this->content_id);
+        }catch(Exception $e){
+            return null;
+        }
     }
 
 

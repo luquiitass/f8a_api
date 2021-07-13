@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Auth;
 use DB;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 
 
@@ -129,8 +130,12 @@ class Publication extends Model
 
     public function addLike(){
         $user_id = request()->get('user_id');
-        $this->likes()->attach($user_id);
-        $this->sendNotification('like');
+        try{
+            $this->likes()->attach($user_id);
+            $this->sendNotification('like');
+        }catch(Exception $e){
+            
+        }   
         return $this;
     }
 

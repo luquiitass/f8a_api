@@ -1,6 +1,10 @@
 <?php
 
 namespace App\Models\Util;
+
+use Exception;
+use Intervention\Image\Exception\NotFoundException;
+
 /**
  * Created by PhpStorm.
  * User: lucas
@@ -30,14 +34,12 @@ class AjaxQuery
 
         $this->model = new  $class;
         $this->query = $class::query();
-        //dd($this);
-
         $this->initQuery();
 
     }
 
     public function getObject($id){
-        $this->object =  $this->model->find($id);
+        $this->object =  $this->model->findOrFail($id);
         $this->initConsultObject();
         return $this->object;
     }

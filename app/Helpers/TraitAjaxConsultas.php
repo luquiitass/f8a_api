@@ -52,7 +52,13 @@ trait TraitAjaxConsultas
 
     public function runFunction($clase,$function)
     {
-        $retorno = AjaxQuery::newModel($clase)->runFunction($function);
+        //echo('runFunction new mod');
+        $ajaxQuery = AjaxQuery::newModel($clase);
+        //echo(' run f ');
+        $retorno = $ajaxQuery->runFunction($function);
+        //echo(' fin run f');
+        //dd($retorno);
+        //return $retorno;
 
         return  ReturnJSON::success(["data" => $retorno]);
         

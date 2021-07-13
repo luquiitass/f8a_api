@@ -14,16 +14,21 @@
 use App\Http\Controllers\Api\AjaxPeticiones;
 use App\Http\Controllers\Auth\AuthController;
 use Symfony\Component\HttpKernel\DataCollector\AjaxDataCollector;
+use Intervention\Image\ImageCacheController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
 Route::get('/prueba', function () {
-    $sub =\App\Models\Team::findOrFail(1);
-    dd($sub['table']);
+    //echo '<img src="'. url('imagecache/medium/3jfVvZb89Dmx66E.jpeg') .'">';
+    //$sub =\App\Models\Team::findOrFail(1);
+    dd(public_path(''));
     //DB::table('teams')->where('id', 29)->delete();
 });
+
+//Route::get('imagecache2/{template}/{filename}',ImageCacheController::getRouter());
+
 
 Route::get('/login', function () {
     return 'Api f8a ';

@@ -9,6 +9,9 @@
 
 namespace App\Models\Util;
 
+use Intervention\Image\ImageManager as Im;
+use App\Models\Image;
+
 const IMAGE_HANDLERS = [
     IMAGETYPE_JPEG => [
         'load' => 'imagecreatefromjpeg',
@@ -197,4 +200,7 @@ class UtilImagenes
         );
 
     }
+
+
+
 }

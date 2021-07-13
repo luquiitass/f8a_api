@@ -143,7 +143,7 @@ class User extends Authenticatable
    {
        $user = Auth::guard('api')->user();
        
-       $user->notifications;
+       //$user->notifications;
        $user->teams;
        $user->player;
 
@@ -179,6 +179,7 @@ class User extends Authenticatable
 
 
    function pageNotifications(){
+       
        return $this->notifications;
    }
 

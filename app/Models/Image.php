@@ -6,6 +6,8 @@ use App\Models\Util\UtilImagenes;
 use Illuminate\Database\Eloquent\Model;
 use App\Models;
 use DB;
+use Intervention\Image\Image as ImageImage;
+use Intervention\Image\ImageManager;
 use URL;
 
 /**
@@ -42,11 +44,11 @@ class Image extends Model
     }
 
     public function getUrlCompleteAttribute(){
-        return   URL::to($this->url)   . '/' .  $this->name;
+        return  url('imagecache/original/' . $this->name); // URL::to($this->url)   . '/' .  $this->name;
     }
 
     public function getUrlCompleteThumbAttribute(){
-        return   URL::to($this->url . 'thumb')   . '/' .  $this->name;
+        return  url('imagecache/medium/' . $this->name);  // URL::to($this->url . 'thumb')   . '/' .  $this->name;
     }
 
 
@@ -60,8 +62,10 @@ class Image extends Model
 
 
             $model = parent::create($attributes);
+            $model->compress();
 
             //self::saveRelation($attributes['saveIn'],$model);
+            
 
             return $model;
         }
@@ -72,6 +76,8 @@ class Image extends Model
 
 
             $model = parent::create($attributes);
+            $model->compress();
+
 
             return $model;
         }
@@ -93,6 +99,8 @@ class Image extends Model
                 $this->deleteFile();
 
                 parent::update($attributes, $options);
+                $this->compress();
+
             }
 
         }
@@ -185,6 +193,20 @@ class Image extends Model
         }else{
 
         }
+    }
+
+
+    public function compress(){
+        $manager = new ImageManager(array('driver' => 'gd'));
+
+        $im = $manager->make( $this->url . $this->name );
+
+        $im->resize(1280, null, function ($constraint) {
+            $constraint->aspectRatio();
+            $constraint->upsize();
+          });
+
+        $im->save();
     }
 
 }

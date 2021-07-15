@@ -111,6 +111,7 @@ class UtilImagenes
      */
     public static function  createThumbnail($src, $dest, $targetWidth, $targetHeight = null) {
 
+        return;
         // 1. Load the image from the given $src
         // - see if the file actually exists
         // - check if it's of a valid image type

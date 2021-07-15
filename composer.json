@@ -9,7 +9,8 @@
         "barryvdh/laravel-ide-helper": "v2.3.2",
         "doctrine/dbal": "2.4",
         "intervention/image": "^2.5",
-        "intervention/imagecache": "2.2.0"
+        "intervention/imagecache": "2.2.0",
+        "gd": "*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

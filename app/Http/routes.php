@@ -81,6 +81,7 @@ Route::group(['prefix'=> '/api/'],function (){
     });
 });
 
+Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 
 Route::group(['prefix'=> '/api2/'],function (){
 

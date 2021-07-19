@@ -161,6 +161,7 @@ return [
         //Way\Generators\GeneratorsServiceProvider::class,
         //Xethron\MigrationsGenerator\MigrationsGeneratorServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
+        Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
 
 
     ],

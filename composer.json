@@ -10,7 +10,8 @@
         "doctrine/dbal": "2.4",
         "intervention/image": "^2.5",
         "intervention/imagecache": "2.2.0",
-        "ext-gd": "*"
+        "ext-gd": "*",
+        "rap2hpoutre/laravel-log-viewer": "^1.7"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

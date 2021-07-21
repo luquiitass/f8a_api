@@ -197,7 +197,7 @@ class Image extends Model
 
 
     public function compress(){
-        return ;
+        //return ;
         $manager = new ImageManager(array('driver' => 'gd'));
 
         $im = $manager->make( $this->url . $this->name );

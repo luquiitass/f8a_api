@@ -50,7 +50,8 @@ Route::group(['prefix'=> '/api/'],function (){
     });// Clase = nombre de la clase , funcion = Create ,Update ,Delete
 
     
-
+    Route::post('password/email', 'Auth\PasswordController@sendResetLinkEmailApi');
+    Route::post('password/reset', 'Auth\PasswordController@resetApi');
 
     Route::group(['middleware' => ['auth:api']],function (){
 
@@ -81,7 +82,6 @@ Route::group(['prefix'=> '/api/'],function (){
     });
 });
 
-Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 
 Route::group(['prefix'=> '/api2/'],function (){
 
@@ -113,3 +113,7 @@ Route::group(['prefix'=> '/api2/'],function (){
     Route::post('image/upload', 'Api\AjaxPeticiones@uploadImage');
 
 });
+
+Route::auth();
+Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+Route::get('/home', 'HomeController@index');

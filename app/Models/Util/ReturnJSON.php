@@ -47,14 +47,14 @@ class ReturnJSON
         //\Log::error("Error Server",$error->getMessage());
         $retorno = array();
         $retorno["status"]="error";
-        $retorno["mensaje"]=$error->getMessage();
+        $retorno["mensaje"]= trans( $error->getMessage() );
         return response()->json($retorno,403);
     }
 
 
     public static function error($msj){
         $retorno = array();
-        $retorno["status"]="success";
+        $retorno["status"]="error";
         $retorno["msjError"]=$msj;
         $json = response()->json($retorno);
         if (Utilidades::isApi()){

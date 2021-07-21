@@ -55,7 +55,7 @@ return [
     |
     */
 
-    'from' => ['address' => null, 'name' => null],
+    'from' => ['address' => 'soporte@futbol8alem.com', 'name' => 'Futbol 8 Alem'],
 
     /*
     |--------------------------------------------------------------------------

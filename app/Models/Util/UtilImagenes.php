@@ -43,7 +43,7 @@ class UtilImagenes
         if (!is_dir($pathLocal) ){
             //\File::makeDirectory($path,0700,true);
             \Log::info("creando directorio " .$pathLocal);
-
+            
             mkdir($path, 0777,true);
             \Log::info("Directorio creado " .$pathLocal);
 

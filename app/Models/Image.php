@@ -200,7 +200,7 @@ class Image extends Model
         //return ;
         $manager = new ImageManager(array('driver' => 'gd'));
 
-        $im = $manager->make( $this->url . $this->name );
+        $im = $manager->make( public_path($this->url) . $this->name );
 
         $im->resize(1280, null, function ($constraint) {
             $constraint->aspectRatio();

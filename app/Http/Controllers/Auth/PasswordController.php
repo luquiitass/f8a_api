@@ -98,7 +98,7 @@ class PasswordController extends Controller
 
         switch ($response) {
             case Password::PASSWORD_RESET:
-                return ReturnJSON::success(trans($response));// $this->getResetSuccessResponse($response);
+                return ReturnJSON::success([trans($response)]);// $this->getResetSuccessResponse($response);
             default:
                 return  ReturnJSON::error(trans($response,[],null,'es')); $this->getResetFailureResponse($request, $response);
         }

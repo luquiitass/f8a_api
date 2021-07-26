@@ -5,12 +5,12 @@ namespace App\Http\Controllers\Auth;
 use App\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
+use App\Models\Util\ReturnJSON;
 use Auth;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
-
-
-
+use PhpParser\Node\Expr\Empty_;
+use PhpParser\Node\Stmt\Return_;
 
 class AuthController extends Controller
 {
@@ -87,6 +87,43 @@ class AuthController extends Controller
         $user = $request->user();
 
         return response()->json([
+            'User' => $user,
+            'api_token' => $user->api_token
+        ]);
+    }
+
+    public function loginSocial(){
+        $inputs = request()->all();
+
+        $email = $inputs['email'];
+        $user = User::where('email',$email)->first() ;
+
+        if(empty ($user) ){
+
+
+            //crear imagen 
+            $image = null;
+
+
+            $newUser = new User();
+            $newUser->first_name = 'test';
+            $newUser->last_name = ' Test';
+            $newUser->role = 'user';
+            $newUser->email = '';
+            $newUser->password = '';
+            $newUser->api_token = str_random(50);
+
+            if( ! empty($image)){
+                $newUser->photo_id = $image->id;
+            }
+
+            
+            $user = $newUser->save();
+            //Auth::guard('api')->login($newUser, true);
+
+        }
+
+        return  ReturnJSON::success([
             'User' => $user,
             'api_token' => $user->api_token
         ]);

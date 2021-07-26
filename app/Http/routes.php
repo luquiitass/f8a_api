@@ -38,6 +38,7 @@ Route::get('/login', function () {
 Route::group(['prefix'=> '/api/'],function (){
 
     Route::post('login','Api\AjaxPeticiones@login');
+    Route::post('loginSocial','Auth\AuthController@loginSocial');
     
     Route::any('methods/User/create',function(){
         $ctr = new AjaxPeticiones();
@@ -48,6 +49,7 @@ Route::group(['prefix'=> '/api/'],function (){
         $ctr = new AjaxPeticiones();
         return $ctr->methods('Error','Create');
     });// Clase = nombre de la clase , funcion = Create ,Update ,Delete
+
 
     
     Route::post('password/email', 'Auth\PasswordController@sendResetLinkEmailApi');

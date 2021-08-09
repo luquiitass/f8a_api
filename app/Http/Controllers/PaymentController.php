@@ -29,4 +29,8 @@ class PaymentController extends Controller
         Log::alert('payment failure' , [ 'params' => json_encode( request()->all() )]);
         # code...
     }
+
+    public function paid(){
+        Log::debug('payment paid_out' , [ 'params' => json_encode( request()->all() )]);
+    }
 }

@@ -14,6 +14,8 @@ class MercadoPagoService extends Model
 {
 
     protected $table = 'categorias';
+    
+    private $token = "TEST-8895056597439462-080214-7a0c9306365026e759c20afaea17f51f-176099545";
 
     public $timestamps = true;
 

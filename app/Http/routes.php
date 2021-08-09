@@ -125,3 +125,5 @@ Route::get('/home', 'HomeController@index');
 Route::any('/payment/success','PaymentController@success');
 Route::any('/payment/pending','PaymentController@pending');
 Route::any('/payment/failure','PaymentController@failure');
+Route::any('/payment/paid','PaymentController@paid');
+

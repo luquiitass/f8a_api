@@ -70,9 +70,9 @@ class Payment extends Model
         $preference->items = array($item);
 
         $preference->back_urls = array(
-            "success" => "https://futbol8alem.com/#/payment/success",
-            "failure" => "https://futbol8alem.com/#/payment/failure",
-            "pending" => "https://futbol8alem.com/#/payment/pending"
+            "success" => "https://api.futbol8alem.com/payment/success",
+            "failure" => "https://api.futbol8alem.com/payment/failure",
+            "pending" => "https://api.futbol8alem.com/payment/pending"
         );
         $preference->auto_return = "approved";
 

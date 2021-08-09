@@ -121,7 +121,7 @@ Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 Route::get('/home', 'HomeController@index');
 
 
-//Rutas de pagos
+//Rutas de pagos 2
 Route::any('/payment/success','PaymentController@success');
 Route::any('/payment/pending','PaymentController@pending');
 Route::any('/payment/failure','PaymentController@failure');

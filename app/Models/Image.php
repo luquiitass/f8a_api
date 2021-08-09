@@ -86,6 +86,28 @@ class Image extends Model
         return null;
     }
 
+    public static function createByUrl($pathSave ,$urlImage)
+    {
+        $url = explode( '=' ,$urlImage);
+
+        if(! empty($url[1])){
+            $urlImage = $url[0] . '=s500-c';
+        }
+
+        //dd($urlImage);
+
+        $name = UtilImagenes::saveImageByUrl($pathSave , $urlImage);
+
+        $attributes = [
+            'url' => $pathSave,
+            'name' => $name,
+            'thumb' => 'false'
+        ];
+
+        return parent::create($attributes);
+        
+    }
+
     public function update(array $attributes = [], array $options = []){
 
         \Log::info("Update image");
@@ -206,6 +228,8 @@ class Image extends Model
             $constraint->aspectRatio();
             $constraint->upsize();
           });
+
+        $im->orientate();
 
         $im->save();
     }

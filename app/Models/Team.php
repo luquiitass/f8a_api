@@ -21,6 +21,10 @@ class Team extends Model
 
     protected $with = ['shield','coverPage','admins'];
 
+    protected $casts = [
+        'paid' => 'boolean'
+    ];
+
     protected $guarded = [];
 
     public function getIsFavoriteAttribute(){
@@ -148,6 +152,17 @@ class Team extends Model
         ];
 
         Notification::create($dataPublication);
+    }
+
+    public function exist(){
+        $name = request()->get('name');
+
+        //return $name;
+
+        $result = Team::where('name', $name)->first();
+
+        return $result;
+
     }
 
 }

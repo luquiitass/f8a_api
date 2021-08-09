@@ -119,3 +119,9 @@ Route::group(['prefix'=> '/api2/'],function (){
 Route::auth();
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 Route::get('/home', 'HomeController@index');
+
+
+//Rutas de pagos
+Route::any('/payment/success','PaymentController@success');
+Route::any('/payment/pending','PaymentController@pending');
+Route::any('/payment/failure','PaymentController@failure');

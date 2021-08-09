@@ -23,7 +23,12 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'first_name','last_name', 'email', 'password','api_token','role'
+        'first_name',
+        'last_name', 
+        'email', 
+        'password',
+        'api_token',
+        'role'
     ];
 
     protected $with = ['photo'];
@@ -87,12 +92,12 @@ class User extends Authenticatable
         $model =  parent::update($attributes, $options);
 
         $this->savePhoto($attributes);
-        $model_ = new stdClass($model);
-        $model_->photo = $this->photo;
-        $model_->teams = $this->teams;
-        $model_->player = $this->player;
+        //$model_ = new stdClass($model);
+        $this->load('photo') ;//= $this->photo;
+        $this->teams ;//= $this->teams;
+        $this->player ;//= $this->player;
 
-        return $model_;
+        return $this;
     }
 
 
@@ -126,7 +131,6 @@ class User extends Authenticatable
                
                 $this->photo_id = $image->id ?? null;
                 $this->save();
-
             }
         }
     }

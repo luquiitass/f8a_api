@@ -11,6 +11,7 @@ namespace App\Models\Util;
 
 use Intervention\Image\ImageManager as Im;
 use App\Models\Image;
+use Log;
 
 const IMAGE_HANDLERS = [
     IMAGETYPE_JPEG => [
@@ -94,6 +95,22 @@ class UtilImagenes
         return $name ;// . $name .'.jpg';
     }
 
+    public static function saveImageByUrl($path , $url)
+    {
+        $data = file_get_contents($url);
+
+       //dd($data);
+
+        $name = self::generarname($path,'jpg');
+
+        $fp = $path . $name;
+
+        file_put_contents( public_path($fp), $data );
+
+        return $name;
+        
+    }
+
     public static function generarname($path,$extension){
         $name = str_random(15) . '.' . $extension;
         if (file_exists($path . $name )){
@@ -102,6 +119,18 @@ class UtilImagenes
         return $name;
     }
 
+    static function file_get_contents_curl($url) {
+        $ch = curl_init();
+      
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_URL, $url);
+      
+        $data = curl_exec($ch);
+        curl_close($ch);
+      
+        return $data;
+    }
 
     /**
      * @param $src - a valid file location

@@ -11,7 +11,7 @@
 
 namespace Symfony\Component\ClassLoader;
 
-@trigger_error('The '.__NAMESPACE__.'\XcacheClassLoader class is deprecated since Symfony 3.3 and will be removed in 4.0. Use `composer install --apcu-autoloader` instead.', E_USER_DEPRECATED);
+@trigger_error('The '.__NAMESPACE__.'\XcacheClassLoader class is deprecated since Symfony 3.3 and will be removed in 4.0. Use `composer install --apcu-autoloader` instead.', \E_USER_DEPRECATED);
 
 /**
  * XcacheClassLoader implements a wrapping autoloader cached in XCache for PHP 5.3.
@@ -81,7 +81,7 @@ class XcacheClassLoader
      */
     public function register($prepend = false)
     {
-        spl_autoload_register(array($this, 'loadClass'), true, $prepend);
+        spl_autoload_register([$this, 'loadClass'], true, $prepend);
     }
 
     /**
@@ -89,7 +89,7 @@ class XcacheClassLoader
      */
     public function unregister()
     {
-        spl_autoload_unregister(array($this, 'loadClass'));
+        spl_autoload_unregister([$this, 'loadClass']);
     }
 
     /**
@@ -106,6 +106,8 @@ class XcacheClassLoader
 
             return true;
         }
+
+        return null;
     }
 
     /**
@@ -132,6 +134,6 @@ class XcacheClassLoader
      */
     public function __call($method, $args)
     {
-        return \call_user_func_array(array($this->decorated, $method), $args);
+        return \call_user_func_array([$this->decorated, $method], $args);
     }
 }

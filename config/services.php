@@ -35,4 +35,9 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    'mp' => [
+        'private_key_test' => 'TEST-8895056597439462-080214-7a0c9306365026e759c20afaea17f51f-176099545'
+    ],
+
+
 ];

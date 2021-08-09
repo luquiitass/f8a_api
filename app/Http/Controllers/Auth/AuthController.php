@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Auth;
 use App\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
+use App\Models\Image;
 use App\Models\Util\ReturnJSON;
 use Auth;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Log;
 use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Stmt\Return_;
 
@@ -101,24 +103,29 @@ class AuthController extends Controller
         if(empty ($user) ){
 
 
-            //crear imagen 
+            //crear imagen
             $image = null;
+            if(! empty($inputs['photoURL'])){
+                $image = Image::createByUrl('/images/users/profile/',$inputs['photoURL']);
+                Log::info($image);
+            }
 
 
             $newUser = new User();
-            $newUser->first_name = 'test';
-            $newUser->last_name = ' Test';
+            $newUser->first_name = $inputs['first_name'];
+            $newUser->last_name = $inputs['last_name'];
             $newUser->role = 'user';
-            $newUser->email = '';
+            $newUser->email = $inputs['email'];
             $newUser->password = '';
             $newUser->api_token = str_random(50);
 
             if( ! empty($image)){
                 $newUser->photo_id = $image->id;
             }
-
             
-            $user = $newUser->save();
+            $newUser->save();
+
+            $user = $newUser;
             //Auth::guard('api')->login($newUser, true);
 
         }

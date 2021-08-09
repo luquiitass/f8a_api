@@ -11,7 +11,7 @@
 
 namespace Symfony\Component\ClassLoader;
 
-@trigger_error('The '.__NAMESPACE__.'\WinCacheClassLoader class is deprecated since Symfony 3.3 and will be removed in 4.0. Use `composer install --apcu-autoloader` instead.', E_USER_DEPRECATED);
+@trigger_error('The '.__NAMESPACE__.'\WinCacheClassLoader class is deprecated since Symfony 3.3 and will be removed in 4.0. Use `composer install --apcu-autoloader` instead.', \E_USER_DEPRECATED);
 
 /**
  * WinCacheClassLoader implements a wrapping autoloader cached in WinCache.
@@ -87,7 +87,7 @@ class WinCacheClassLoader
      */
     public function register($prepend = false)
     {
-        spl_autoload_register(array($this, 'loadClass'), true, $prepend);
+        spl_autoload_register([$this, 'loadClass'], true, $prepend);
     }
 
     /**
@@ -95,7 +95,7 @@ class WinCacheClassLoader
      */
     public function unregister()
     {
-        spl_autoload_unregister(array($this, 'loadClass'));
+        spl_autoload_unregister([$this, 'loadClass']);
     }
 
     /**
@@ -112,6 +112,8 @@ class WinCacheClassLoader
 
             return true;
         }
+
+        return null;
     }
 
     /**
@@ -137,6 +139,6 @@ class WinCacheClassLoader
      */
     public function __call($method, $args)
     {
-        return \call_user_func_array(array($this->decorated, $method), $args);
+        return \call_user_func_array([$this->decorated, $method], $args);
     }
 }

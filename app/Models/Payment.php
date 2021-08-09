@@ -23,6 +23,8 @@ class Payment extends Model
         'start',
         'end',
         'amount',
+        'order_id',
+        'payment_id',
         'preference_id',
         'preference_json',
         'type', 
@@ -65,7 +67,7 @@ class Payment extends Model
         $item = new MercadoPago\Item();
         $item->title = 'Registro de Equipo ' . $team->name;
         $item->quantity = 1;
-        $item->unit_price = 500;
+        $item->unit_price = 10;
         $item->currency_id = "ARS";
         $preference->items = array($item);
 
@@ -79,7 +81,7 @@ class Payment extends Model
         $preference->save();
     
         $payment = Payment::create([
-            'status' => 'CREATED',
+            'status' => 'created',
             'amount' => '500',
             'preference_id' => $preference->id,
             'type' => 'START', 
@@ -101,7 +103,7 @@ class Payment extends Model
         $user = \Auth::guard('api')->user();
 
 
-        $payment = self::where('team_id', $team_id)->where('status',"CREATED")->where('preference_id',null)->first();
+        $payment = self::where('team_id', $team_id)->where('status',"created")->where('preference_id',null)->first();
 
         if(empty($payment)){
             $payment = $this->createPayment($team);
@@ -112,6 +114,25 @@ class Payment extends Model
         $payment->user = $user;
 
         return $payment;
+    }
+
+    public static  function success(){
+
+        $inputs = request()->all();
+
+        $payment = self::where('preference_id',$inputs['preference_id'])->first();
+
+        if(! empty($payment)){
+            $payment->payment_id = $inputs['payment_id'];
+            $payment->order_id = $inputs['merchant_order_id'];
+            $payment->status = $inputs['status'];
+
+            $payment->save();
+
+            //Enviar Notificacion , email de pago 
+        }
+
+
     }
         
 }

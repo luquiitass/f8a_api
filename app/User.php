@@ -166,6 +166,7 @@ class User extends Authenticatable
                     ->with('player')
                     ->get();
    }
+   
 
    function pageMyProfile(){
 

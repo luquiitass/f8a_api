@@ -4,6 +4,7 @@ namespace App;
 
 use App\Models\Image;
 use App\Models\Notification;
+use App\Models\Payment;
 use App\Models\Player;
 use App\Models\Publication;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -65,6 +66,10 @@ class User extends Authenticatable
 
     public function notifications(){
         return $this->hasMany(Notification::class)->orderBy('id','desc');
+    }
+
+    public function payments(){
+        return $this->hasMany(Payment::class)->orderBy('id','desc');
     }
    
     public function getCompleteNameAttribute(){
@@ -187,6 +192,19 @@ class User extends Authenticatable
    function pageNotifications(){
        
        return $this->notifications;
+   }
+
+   public function changesNotifications(){
+       if($this->counts_not > 0){
+           return [
+               'counts_not' => $this->counts_not,
+               'teams' => $this->teams,
+               'player' => $this->player
+           ];
+       }
+       return [
+           'counts_not' => 0
+       ];
    }
 
 

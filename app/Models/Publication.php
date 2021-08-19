@@ -125,7 +125,7 @@ class Publication extends Model
     public function list(){
         return parent::orderBy('created_at','desc')
             ->withCount(['comments','likes'])
-            ->get();
+            ->paginate(15);
     }
 
     public function addLike(){

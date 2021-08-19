@@ -237,6 +237,7 @@ class Game extends Model
     function dataEvent(){
         $data = [];
 
+        $data['game'] = $this;
         $data['team_l'] = $this->team_l->load('players');
         $data['team_v'] = $this->team_v->load('players');
         $data['events'] = $this->events;

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Models\Payment;
 use Log;
+use MercadoPago\Payer;
 
 class PaymentController extends Controller
 {
@@ -17,10 +18,10 @@ class PaymentController extends Controller
         Log::debug('payment success' , [ 'params' => json_encode( request()->all() )]);
         # code...
 
-        //Payment::success();
+        Payment::success();
 
-        header("Location: https://futbol8alem.com/#/payment/success");
-        die();
+        //header("Location: https://futbol8alem.com/#/payment/success");
+        //die();
     }
 
 
@@ -28,18 +29,18 @@ class PaymentController extends Controller
     {
         Log::debug('payment pending' , [ 'params' => json_encode( request()->all() )]);
         # code...
-
-        header("Location: https://futbol8alem.com/#/payment/pending");
-        die();
+        Payment::pending();
+        //header("Location: https://futbol8alem.com/#/payment/pending");
+        //die();
     }
 
     public function failure()
     {
         Log::alert('payment failure' , [ 'params' => json_encode( request()->all() )]);
         # code...
-
-        header("Location: https://futbol8alem.com/#/payment/failure");
-        die();
+        Payment::failure();
+        //header("Location: https://futbol8alem.com/#/payment/failure");
+        //die();
     }
 
     public function paid(){

@@ -141,7 +141,8 @@ class Player extends Model
     }
 
     public function pageHomePlayers(){
-        return self::get();
+        
+        return self::paginate(20);
     }
 
 
@@ -184,5 +185,18 @@ class Player extends Model
             Notification::create($dataPublication);
 
         }
+    }
+
+    public function searchPlayer()
+    {
+        # code...
+        $query = request()->get('query');
+
+        $data = self::where('name', 'LIKE', '%' . $query . '%')
+                    ->orWhere('nick', 'LIKE', '%' . $query . '%')
+                    ->get();
+
+        return $data;
+
     }
 }

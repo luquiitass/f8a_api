@@ -24,7 +24,7 @@ class UserStoreRequest extends Request
     public function rules()
     {
         return [
-            'email' => 'required|unique:users,email',
+            'email' => 'required|email|unique:users,email',
             'photo' => 'required',
             'first_name'=>'required|min:3',
             'last_name'=>'required|min:3',

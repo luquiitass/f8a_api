@@ -111,21 +111,33 @@ class Player extends Model
 
     public function countGoals(){
         $event = TypeEvent::where('name','Gol')->first();
+        if(isEmpty($event)){
+            $event = TypeEvent::create(['name' => 'Gol','icon'=>'gol2.png']);
+        }
         return $this->countGoals = $this->events()->where('type_event_id',$event->id)->count();
     }
 
     public function countRed(){
         $event = TypeEvent::where('name','Roja')->first();
+        if(isEmpty($event)){
+            $event = TypeEvent::create(['name' => 'Roja','icon'=>'t_r.png']);
+        }
         return $this->countRed = $this->events()->where('type_event_id',$event->id)->count();
     }
 
     public function countYellow(){
         $event = TypeEvent::where('name','Amarilla')->first();
+        if(isEmpty($event)){
+            $event = TypeEvent::create(['name' => 'Amarilla','icon'=>'t_a.png']);
+        }
         return $this->countYellow = $this->events()->where('type_event_id',$event->id)->count();
     }
 
     public function countAssistance(){
         $event = TypeEvent::where('name','Asistencia')->first();
+        if(isEmpty($event)){
+            $event = TypeEvent::create(['name' => 'Asistencia','icon'=>'']);
+        }
         return $this->countAssistence = $this->events()->where('type_event_id',$event->id)->count();
     }
 

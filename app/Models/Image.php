@@ -219,12 +219,14 @@ class Image extends Model
 
 
     public function compress(){
-        //return ;
+        return ;
         $manager = new ImageManager(array('driver' => 'gd'));
 
         $im = $manager->make( public_path($this->url) . $this->name );
 
-        $im->resize(1280, null, function ($constraint) {
+        $width = 900;
+
+        $im->resize($width, null, function ($constraint) {
             $constraint->aspectRatio();
             $constraint->upsize();
           });

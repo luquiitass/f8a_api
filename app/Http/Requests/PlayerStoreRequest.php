@@ -24,7 +24,17 @@ class PlayerStoreRequest extends Request
     public function rules()
     {
         return [
-            'name'=>'required|min:3'
+            'name'=>'required|min:3',
+            'position_id' => 'required',
+            'birth_date' => 'required'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'position_id.required' => 'Debe seleccionar la posición que tendrá el jugador',
+            'birth_date.required' => 'Debe ingresar la fecha de nacimiento.'
         ];
     }
 }

@@ -2,8 +2,12 @@
 
 namespace App\Models;
 
+use App\Exceptions\ExepcionValidaciones;
+use App\Models\Util\ReturnJSON;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Log;
 
 /**
  * Class Paise
@@ -80,17 +84,46 @@ class Game extends Model
     public function createGameAdmin(){
         $inputs = request()->all();
 
+        if(!empty($inputs['other_team'])){
+            $nameNewTeam = $inputs['other_team'];
+
+            if(Team::where('name',$nameNewTeam)->count() > 0){
+                throw new Exception('El nombre del equipo ya existe.');
+            }
+            
+            $newTeam = new Team([
+                'name' => $nameNewTeam
+            ]);
+
+            $newTeam->save();
+
+            $admins_id = User::where('role','admin')->pluck('id')->toArray();
+
+            foreach($admins_id as $admin_id){
+                $newTeam->admins()->attach($admins_id);
+                $newTeam->sendNotification($admin_id);
+            }
+            
+           
+            if($inputs['v_team'] == -1 ){
+                $inputs['v_team'] = $newTeam->id;
+            }else{
+                $inputs['l_team'] = $newTeam->id;
+            }
+        }
+
         //Validaciones;
 
         $game = parent::create($inputs);
 
-        $game->notificationToAdminsNewGame($inputs['team_creator']);
+        //$game->notificationToAdminsNewGame($inputs['team_creator']);
 
-        
-        $game->notificationNewTeamInGame();
-        
+        /*if(!empty($game->other_team)){
+            $game->notificationNewTeamInGame();
+        }
+        */
 
-        return $game;
+        return $game->load('team_l','team_v');
     }
 
     public function confirm(){
@@ -359,6 +392,7 @@ class Game extends Model
     }
 
     public function notificationNewTeamInGame(){
+
 
         foreach(User::where('role','admin')->get() as $admin){
 

@@ -25,10 +25,20 @@ class UserStoreRequest extends Request
     {
         return [
             'email' => 'required|email|unique:users,email',
-            'photo' => 'required',
+            //'photo' => 'required',
             'first_name'=>'required|min:3',
             'last_name'=>'required|min:3',
             'password'=>'required|confirmed|min:6'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'first_name.required' => 'El campo Nombre es obligatorio.',
+            'last_name.required' => 'El campo Apellido es obligatorio.',
+            'password.required' => 'El campo Contraseña es obligatorio..'
+
         ];
     }
 }

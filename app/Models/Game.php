@@ -18,13 +18,15 @@ class Game extends Model
         'id',
         'l_team',
         'v_team',
+        'other_team',
         'l_goals',
         'v_goals',
         'status',
         'time',
         'location',
         'description',
-        'date'
+        'date',
+        'team_creator'
     ];
 
     public $with = ['team_l','team_v','events'];
@@ -75,6 +77,80 @@ class Game extends Model
     }
 
 
+    public function createGameAdmin(){
+        $inputs = request()->all();
+
+        //Validaciones;
+
+        $game = parent::create($inputs);
+
+        $game->notificationToAdminsNewGame($inputs['team_creator']);
+
+        
+        $game->notificationNewTeamInGame();
+        
+
+        return $game;
+    }
+
+    public function confirm(){
+        $this->status = 'Pendiente';
+        $this->save();
+
+          
+        $team_cha = $this->team_creator == $this->l_team ? $this->team_v : $this->team_l;
+        $admins = $this->team_v->admins;
+
+     
+        foreach($admins as $admin){
+            $dataNotification = [
+                'type' => 'challenge-confirm',
+                'user_id' => $admin->id,
+                'title' => '',
+                'route' => '/new-challenge/' . $this->id,
+                'content' => 'Team',
+                'content_id' => $team_cha->id,
+                'autor_table' => 'Team',
+                'autor_id' => $this->team_creator
+            ];
+
+            Notification::create($dataNotification);
+        }
+
+
+        return $this->load('team_v','team_l');
+    }
+
+    public function cancel(){
+        $this->status = 'Cancelado';
+        $this->save();
+        
+        
+        $team_cha = $this->team_creator == $this->l_team ? $this->team_v : $this->team_l;
+        $admins = $this->team_v->admins;
+
+
+        foreach($admins as $admin){
+            $dataNotification = [
+                'type' => 'challenge-cancel',
+                'user_id' => $admin->id,
+                'title' => '',
+                'route' => '/new-challenge/' . $this->id,
+                'content' => 'Team',
+                'content_id' => $team_cha->id,
+                'autor_table' => 'Team',
+                'autor_id' => $this->team_creator
+            ];
+
+            Notification::create($dataNotification);
+        }
+        
+        
+        return $this->load('team_v','team_l');
+
+
+
+    }
     
     function games()
     {
@@ -252,5 +328,54 @@ class Game extends Model
         $this->events;
 
         return $this;
+    }
+
+    public function notificationToAdminsNewGame($team_creator){
+        
+        $admins = [];
+        if(! ($team_creator == $this->v_team)){
+            $team_cha = $this->team_v;
+            $admins = $this->team_v->admins;
+        }else{
+            $team_cha = $this->team_l;
+            $admins = $this->team_l->admins;
+        }
+
+     
+        foreach($admins as $admin){
+            $dataNotification = [
+                'type' => 'new_challenge',
+                'user_id' => $admin->id,
+                'title' => '',
+                'route' => '/new-challenge/' . $this->id,
+                'content' => 'Team',
+                'content_id' => $team_cha->id,
+                'autor_table' => 'Team',
+                'autor_id' => $this->team_creator
+            ];
+
+            Notification::create($dataNotification);
+        }
+    }
+
+    public function notificationNewTeamInGame(){
+
+        foreach(User::where('role','admin')->get() as $admin){
+
+            $dataNotification = [
+                'type' => 'new_team_in_game',
+                'user_id' => $admin->id,
+                'title' => $this->other_team,
+                'route' => '/games',
+                'content' => 'Game',
+                'content_id' => $this->id,
+                'autor_table' => 'Team',
+                'autor_id' => $this->team_creator
+            ];
+
+            Notification::create($dataNotification);
+
+        }
+
     }
 }

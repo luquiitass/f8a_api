@@ -23,8 +23,13 @@ class TeamUpdateRequest extends Request
      */
     public function rules()
     {
+
+        $id = request()->get('id');
+
+        //dd($id);
         return [
-            //
+            'name'=>'required|min:3|unique:teams,name,' .$id
+
         ];
     }
 }

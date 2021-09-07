@@ -18,7 +18,7 @@ class Error extends Model
     protected $fillable = [
         'status',
         'text',
-        'model'
+        'model',
     ];
 
 
@@ -29,7 +29,10 @@ class Error extends Model
     {
         $model = parent::create($attributes);
 
-        Log::alert('error APP',[$model->text]);
+        Log::alert('error APP',[
+            'url'=>$attributes['url'] ,
+            'line' => $attributes['line'],
+            'error'=>$model->text]);
 
         return $model;
     }

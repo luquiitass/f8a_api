@@ -36,7 +36,8 @@ return array(
         public_path('images/team'),
         public_path('images/team/cover_page'),
         public_path('images/publications'),
-        public_path('images/players/profile')
+        public_path('images/players/profile'),
+        public_path('results/')
     ),
 
     /*

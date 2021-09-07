@@ -39,6 +39,28 @@ class Team extends Model
         return $this->belongsToMany(Comment::class);
     }
 
+    public function games(){
+        return $this->hasMany(Game::class,'v_team')->orWhere('l_team',$this->id);
+    }
+
+
+    public function getStatisticsAttribute(){
+        $data = [];
+
+        $data[] = ['name' => 'Ganados:', 'value'=> $this->games()->ganados($this->id)->count()];
+        $data[] = ['name' => 'Perdidos:', 'value'=> $this->games()->perdidos($this->id)->count()];
+        $data[] = ['name' => 'Empatados:', 'value'=> $this->games()->empatados()->count()];
+
+        $data[] = ['name' => 'Suspendidos:', 'value'=> $this->games()->suspendidos()->count()];
+        $data[] = ['name' => 'Total Jugados:', 'value'=>  $this->games()->jugados()->count()];
+
+
+        return $data;
+
+    }
+
+  
+
     public static function create(array $attributes = [])
     {
 
@@ -108,6 +130,7 @@ class Team extends Model
         $this->getIsFavoriteAttribute();
         $this->players;
         $this->comments;
+        $this->statistics = $this->statistics;
         return $this;
     }
 
@@ -163,6 +186,17 @@ class Team extends Model
 
         return $result;
 
+    }
+
+    public function noAdmins(){
+        return self::with('admins')->where(function($q){
+            $q->whereHas('admins',function($q){
+                $q->where('role','!=','admin');
+            });
+        })
+        ->orWhere(function($q){
+            $q->doesnthave('admins');
+        })->get();
     }
 
 }

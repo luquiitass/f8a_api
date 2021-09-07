@@ -24,6 +24,7 @@ class ImageStoreRequest extends Request
     public function rules()
     {
         return [
+            'data' => 'required'
             //'name'=>'required|min:3|unique:teams,name'
         ];
     }

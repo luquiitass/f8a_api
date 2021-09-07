@@ -53,8 +53,6 @@ class Event extends Model
 
     public function update(array $attributes = [], array $options = [])
     {
-
-
          parent::update($attributes, $options);
 
         $this->load('typeEvent');

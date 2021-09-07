@@ -55,7 +55,6 @@ class Image extends Model
     public static function create(array $attributes = [])
     {
 
-
         if (array_has($attributes,'data') && strlen($attributes["data"]) > 10 ){
 
             $attributes = self::createFoto($attributes);

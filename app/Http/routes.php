@@ -13,6 +13,8 @@
 
 use App\Http\Controllers\Api\AjaxPeticiones;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\FunctionsDeployController;
+use App\Models\Game;
 use Symfony\Component\HttpKernel\DataCollector\AjaxDataCollector;
 use Intervention\Image\ImageCacheController;
 
@@ -20,11 +22,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/prueba', function () {
+Route::any('/prueba', function () {
     //echo '<img src="'. url('imagecache/medium/3jfVvZb89Dmx66E.jpeg') .'">';
     //$sub =\App\Models\Team::findOrFail(1);
-    dd(public_path(''));
+    return 'hola';
     //DB::table('teams')->where('id', 29)->delete();
+});
+
+Route::get('shareResult/{id}', function ($id)
+{
+    $game = Game::find($id);
+    return view('/share/result',['game'=>$game]);
 });
 
 //Route::get('imagecache2/{template}/{filename}',ImageCacheController::getRouter());
@@ -126,4 +134,6 @@ Route::any('/payment/success','PaymentController@success');
 Route::any('/payment/pending','PaymentController@pending');
 Route::any('/payment/failure','PaymentController@failure');
 Route::any('/payment/paid','PaymentController@paid');
+
+Route::resource('functionDeploy/setWinner', 'FunctionsDeployController@setWinner');
 

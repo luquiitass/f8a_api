@@ -30,9 +30,9 @@ class Error extends Model
         $model = parent::create($attributes);
 
         Log::alert('error APP',[
-            'url'=>$attributes['url'] ,
-            'line' => $attributes['line'],
-            'error'=>$model->text]);
+            'url'=> array_has($attributes,'url') ? $attributes['url'] : '' ,
+            'line' => array_has($attributes , 'line') ? $attributes['line'] : '',
+            'error'=> $model->text]);
 
         return $model;
     }

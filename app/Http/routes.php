@@ -29,11 +29,7 @@ Route::any('/prueba', function () {
     //DB::table('teams')->where('id', 29)->delete();
 });
 
-Route::get('shareResult/{id}', function ($id)
-{
-    $game = Game::find($id);
-    return view('/share/result',['game'=>$game]);
-});
+
 
 //Route::get('imagecache2/{template}/{filename}',ImageCacheController::getRouter());
 
@@ -135,5 +131,11 @@ Route::any('/payment/pending','PaymentController@pending');
 Route::any('/payment/failure','PaymentController@failure');
 Route::any('/payment/paid','PaymentController@paid');
 
-Route::resource('functionDeploy/setWinner', 'FunctionsDeployController@setWinner');
+Route::get('functionDeploy/setWinner', 'FunctionsDeployController@setWinner');
+Route::get('/redirect','ShareController@redirect');
 
+Route::get('shareResult/{id}', function ($id)
+{
+    $game = Game::find($id);
+    return view('/share/result',['game'=>$game])->render();
+});

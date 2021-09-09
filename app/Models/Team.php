@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use DB;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -43,6 +45,27 @@ class Team extends Model
         return $this->hasMany(Game::class,'v_team')->orWhere('l_team',$this->id);
     }
 
+    public function getNextGameAttribute(){
+        $date  = date('Y-m-d H:i:s');
+        //$time = date('H:i:s');
+        return $this->games()
+                    ->pendientes()
+                    ->select('*',DB::raw("CONCAT(date,' ',time) as date_time"))
+                    ->whereDate('date','>=',$date)
+                    ->first();
+    }
+
+    public function getOldGameAttribute(){
+        $date  = date('Y-m-d H:i:s');
+
+        return $this->games()
+                    ->jugados()
+                    ->select('*',DB::raw("CONCAT(date,' ',time) as date_time"))
+                    ->whereDate('date','<=',$date)
+                    ->orderBy('date_time','desc')
+                    ->first();
+    }
+
 
     public function getStatisticsAttribute(){
         $data = [];
@@ -53,7 +76,6 @@ class Team extends Model
 
         $data[] = ['name' => 'Suspendidos:', 'value'=> $this->games()->suspendidos()->count()];
         $data[] = ['name' => 'Total Jugados:', 'value'=>  $this->games()->jugados()->count()];
-
 
         return $data;
 
@@ -122,6 +144,7 @@ class Team extends Model
 
     //Functions
 
+
     public function getAllTeamsSelect(){
         return self::select('id','name')->orderBy('name')->get();
     }
@@ -130,7 +153,8 @@ class Team extends Model
         $this->getIsFavoriteAttribute();
         $this->players;
         $this->comments;
-        $this->statistics = $this->statistics;
+        $this->oldGame = $this->oldGame;
+        $this->nextGame = $this->nextGame;
         return $this;
     }
 

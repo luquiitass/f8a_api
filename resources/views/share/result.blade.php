@@ -14,8 +14,7 @@
             background-repeat: no-repeat;
             background-size: cover;
             background-position: center;
-            background-image: url("{{{url('assets/f1.jpg')}}}");
-        }
+            }
 
         .avatar {
             border-radius: 50%;
@@ -168,6 +167,13 @@ function printToFile(div) {
             contentType: false,
             processData: false,success: function(response){
                  console.log(response);
+                 if(response['status'] = 'success'){
+                     let image = response['Image'];
+                     console.log('image',image);
+                     let new_url = "<?php echo  url('api2/model/Image/') ?>/" + image.id;
+                     console.log('new path' , new_url)
+                     //window.location.href = new_url;
+                 }
               },
            });
             //create your own dialog with warning before saving file

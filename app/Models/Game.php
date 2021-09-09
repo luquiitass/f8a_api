@@ -67,17 +67,14 @@ class Game extends Model
     }
 
     public function scopeGanados($query,$team_id){
-        $query->where('winner',$team_id)->whereNotNull('winner');
+        return $query->where('winner',$team_id)->whereNotNull('winner');
     }
 
     public function scopePerdidos($query,$team_id){
-
-        $query->where('winner','!=',$team_id)->whereNotNull('winner');
+        return $query->where('winner','!=',$team_id)->whereNotNull('winner');
     }
 
     public function scopeEmpatados($query){
-
-
         return $query
                 ->jugados()
                 ->whereColumn('l_goals','v_goals');
@@ -164,6 +161,11 @@ class Game extends Model
         */
 
         return $game->load('team_l','team_v');
+    }
+
+    public function pageBanner()
+    {
+        return $this;
     }
 
     public function confirm(){

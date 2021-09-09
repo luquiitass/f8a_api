@@ -80,6 +80,22 @@ class Game extends Model
                 ->whereColumn('l_goals','v_goals');
     }
 
+    public function getOldGameAttribute(){
+        $game = $this;
+        return $this->where('status','Jugado')
+                    ->where(function($q)use ($game){
+                        $q->where(function($q2) use ($game){
+                            $q2->where('l_team',$game->l_team)
+                                ->where('v_team',$game->v_team);
+                        })
+                        ->orWhere(function($q3) use ($game){
+                            $q3->where('v_team',$game->l_team)
+                                ->where('l_team',$game->v_team);
+                        });
+                    })
+                    ->first();
+    }
+
 
     public static function create(array $attributes = [])
     {
@@ -404,6 +420,7 @@ class Game extends Model
     public function dataProfile()
     {
         $this->events;
+        $this['oldGame'] = $this->oldGame;
 
         return $this;
     }

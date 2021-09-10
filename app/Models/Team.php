@@ -70,12 +70,12 @@ class Team extends Model
     public function getStatisticsAttribute(){
         $data = [];
 
-        $data[] = ['name' => 'Ganados:', 'value'=> $this->games()->ganados($this->id)->count()];
-        $data[] = ['name' => 'Perdidos:', 'value'=> $this->games()->perdidos($this->id)->count()];
-        $data[] = ['name' => 'Empatados:', 'value'=> $this->games()->empatados()->count()];
+        $data[] = ['name' => 'Ganados', 'value'=> $this->games()->ganados($this->id)->count()];
+        $data[] = ['name' => 'Perdidos', 'value'=> $this->games()->perdidos($this->id)->count()];
+        $data[] = ['name' => 'Empatados', 'value'=> $this->games()->empatados()->count()];
+        $data[] = ['name' => 'Jugados', 'value'=>  $this->games()->jugados()->count()];
+        $data[] = ['name' => 'Suspendidos', 'value'=> $this->games()->suspendidos()->count()];
 
-        $data[] = ['name' => 'Suspendidos:', 'value'=> $this->games()->suspendidos()->count()];
-        $data[] = ['name' => 'Total Jugados:', 'value'=>  $this->games()->jugados()->count()];
 
         return $data;
 
@@ -155,6 +155,29 @@ class Team extends Model
         $this->comments;
         $this->oldGame = $this->oldGame;
         $this->nextGame = $this->nextGame;
+        $this['statistics'] = $this->statistics;
+        return $this;
+    }
+
+    public function pageGames(){
+
+        $status = request()->get('status');
+        if($status){
+            if($status == 'ganados' || $status == 'perdidos'){  
+                $this['games'] = $this->games()->jugados()->$status($this->id)->get();
+            }
+            else if($status == 'suspendidos'){
+                $this['games'] = $this->games()->$status()->get();
+            }
+            else{
+                $this['games'] = $this->games()->jugados()->$status()->get();
+            }
+
+        }else{
+            $this->games;
+        }
+
+
         return $this;
     }
 

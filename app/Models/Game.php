@@ -31,7 +31,8 @@ class Game extends Model
         'location',
         'description',
         'date',
-        'team_creator'
+        'team_creator',
+        'winner'
     ];
 
     public $with = ['team_l','team_v','events'];
@@ -66,12 +67,12 @@ class Game extends Model
         return $query->where('status','Suspendido');
     }
 
-    public function scopeGanados($query,$team_id){
-        return $query->where('winner',$team_id)->whereNotNull('winner');
+    public function scopeGanados($query,$team_id ){
+        return $query->jugados()->whereNotNull('winner')->where('winner',$team_id);
     }
 
-    public function scopePerdidos($query,$team_id){
-        return $query->where('winner','!=',$team_id)->whereNotNull('winner');
+    public function scopePerdidos($query,$team_id ){
+        return $query->jugados()->whereNotNull('winner')->where('winner','!=',$team_id);
     }
 
     public function scopeEmpatados($query){
@@ -130,7 +131,9 @@ class Game extends Model
             $this->save();
         }else if($this->v_goals < $this->l_goals){
             $this->winner = $this->l_team;
-            $this->save();        }
+            $this->save();        
+        }
+        return $this;
     }
 
 

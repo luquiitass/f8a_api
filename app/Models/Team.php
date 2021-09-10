@@ -76,7 +76,7 @@ class Team extends Model
         $data[] = ['name' => 'Jugados', 'value'=>  $this->games()->jugados()->count()];
         $data[] = ['name' => 'Suspendidos', 'value'=> $this->games()->suspendidos()->count()];
 
-
+        //nuevo
         return $data;
 
     }

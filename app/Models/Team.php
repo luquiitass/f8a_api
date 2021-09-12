@@ -42,7 +42,7 @@ class Team extends Model
     }
 
     public function games(){
-        return $this->hasMany(Game::class,'v_team')->orWhere('l_team',$this->id)->orderBy('date','asc');
+        return $this->hasMany(Game::class,'v_team')->orWhere('l_team',$this->id);
     }
 
     public function getNextGameAttribute(){
@@ -165,13 +165,13 @@ class Team extends Model
         $status = request()->get('status');
         if($status){
             if($status == 'ganados' || $status == 'perdidos'){  
-                $this['games'] = $this->games()->jugados()->$status($this->id)->get();
+                $this['games'] = $this->games()->orderBy('date','asc')->jugados()->$status($this->id)->get();
             }
             else if($status == 'suspendidos'){
-                $this['games'] = $this->games()->$status()->get();
+                $this['games'] = $this->games()->orderBy('date','asc')->$status()->get();
             }
             else{
-                $this['games'] = $this->games()->jugados()->$status()->get();
+                $this['games'] = $this->games()->orderBy('date','asc')->jugados()->$status()->get();
             }
 
         }else{

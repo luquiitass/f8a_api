@@ -87,7 +87,6 @@ class Team extends Model
     public static function create(array $attributes = [])
     {
 
-
         $model = parent::create($attributes);
 
         $model->updateAdmins($attributes);

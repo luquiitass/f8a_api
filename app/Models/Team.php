@@ -46,17 +46,18 @@ class Team extends Model
     }
 
     public function getNextGameAttribute(){
-        $date  = date('Y-m-d H:i:s');
+        $date  = date('Y-m-d');
         //$time = date('H:i:s');
         return $this->games()
                     ->pendientes()
                     ->select('*',DB::raw("CONCAT(date,' ',time) as date_time"))
                     ->whereDate('date','>=',$date)
+                    ->orderBy('date_time','asc')
                     ->first();
     }
 
     public function getOldGameAttribute(){
-        $date  = date('Y-m-d H:i:s');
+        $date  = date('Y-m-d');
 
         return $this->games()
                     ->jugados()

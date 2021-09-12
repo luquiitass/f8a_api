@@ -42,7 +42,7 @@ class Team extends Model
     }
 
     public function games(){
-        return $this->hasMany(Game::class,'v_team')->orWhere('l_team',$this->id);
+        return $this->hasMany(Game::class,'v_team')->orWhere('l_team',$this->id)->orderBy('date','asc');
     }
 
     public function getNextGameAttribute(){

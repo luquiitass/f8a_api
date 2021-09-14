@@ -100,17 +100,19 @@ class Game extends Model
 
     public static function create(array $attributes = [])
     {
-        self::validCreate($attributes);
+        parent::validCreate($attributes);
 
         $model = parent::create($attributes);
         $model->setWinner();
+        $model->load('team_v','team_l');
 
 
-        return $model->load('team_v','team_l');
+        return  $model;
     }
 
     public function update(array $attributes = [], array $options = [])
     {
+        
 
         $model =  parent::update($attributes, $options);
 
@@ -154,7 +156,7 @@ class Game extends Model
     public function createGameAdmin(){
         $inputs = request()->all();
 
-        $this->validCreate($inputs);
+        //$this->validCreate($inputs);
 
         if(!empty($inputs['other_team'])){
             $nameNewTeam = $inputs['other_team'];
@@ -182,11 +184,18 @@ class Game extends Model
             }else{
                 $inputs['l_team'] = $newTeam->id;
             }
+
         }
 
         //Validaciones;
 
         $game = parent::create($inputs);
+
+        Email::notifyAdmin(
+            "Se ha creado un partido entre " . $game->team_l->name . " vs " . $game->team_v->name . "para el : " . $game->date,
+            'Nuevo partido'
+        );
+
 
         //$game->notificationToAdminsNewGame($inputs['team_creator']);
 

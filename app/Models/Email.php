@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Util\ReturnJSON;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Log;
 use Mail;
@@ -60,6 +61,13 @@ class Email extends Model
     }
 
 
+    public static function notifyAdmin($message,$subject = ''){
+        $admins = User::where('role','admin')->get();
+
+        foreach($admins as $admin){
+            parent::sendText($message,$admin,$subject);
+        }
+    }
 
 
     public function send($view , $data , $user,$subject ){
@@ -73,6 +81,19 @@ class Email extends Model
         $res =  Mail::send($view,$data, function ($m) use ($user,$subject) {
             //$m->from("example@gmail.com", 'Fútbol8 Alem');
             $m->to($user->email, $user->email)->subject($subject);
+        });
+
+        Log::info('send Email to '. $user->completeName . ' ' . $user->email ,[$res]);
+
+    }
+
+    public function sendText($text,$user,$subject){
+        $when = Carbon::now()->addMinutes(2);
+
+        $res =  Mail::raw($text, function ($m) use ($user,$subject,$when) {
+            //$m->from("example@gmail.com", 'Fútbol8 Alem');
+            $m->to($user->email, $user->email)->subject($subject);
+            $m->later($when);
         });
 
         Log::info('send Email to '. $user->completeName . ' ' . $user->email ,[$res]);

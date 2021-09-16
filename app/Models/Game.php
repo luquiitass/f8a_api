@@ -136,7 +136,7 @@ class Game extends Model
         
         $teamV = Team::find($attributes['v_team']);
 
-        if($teamL->games->where('date',$attributes['date'])->count() ){
+        if($teamV->games->where('date',$attributes['date'])->count() ){
             throw new Exception('El equipo  ' .  strtoupper($teamV->name) . ' ya se encuentra asociado a un partido en esta fecha. ');
         } 
     }

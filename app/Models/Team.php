@@ -174,7 +174,7 @@ class Team extends Model
             }
 
         }else{
-            $this->games;
+            $this['games'] = $this->games()->orderBy('date','asc')->get();
         }
 
 

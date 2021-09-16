@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Jobs\SendReminderEmail;
 use App\Models\Util\ReturnJSON;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Log;
 use Mail;
 
@@ -13,6 +15,8 @@ use Mail;
  */
 class Email extends Model
 {
+
+    use DispatchesJobs;
 
     protected $table = 'emails';
 
@@ -88,15 +92,26 @@ class Email extends Model
     }
 
     public function sendText($text,$user,$subject){
-        $when = Carbon::now()->addMinutes(2);
 
-        $res =  Mail::raw($text, function ($m) use ($user,$subject,$when) {
+        
+
+        $job = new SendReminderEmail(SendReminderEmail::EmailNotifyAdmin,[
+            'text'=>$text,
+            'user'=>$user,
+            'subject'=> $subject
+        ]);
+
+        //$job->delay(60);
+
+        $this->dispatch($job);
+
+        /*$res =  Mail::queue('emails.text',['text'=>$text], function ($m) use ($user,$subject) {
             //$m->from("example@gmail.com", 'Fútbol8 Alem');
             $m->to($user->email, $user->email)->subject($subject);
-            $m->later($when);
+            //$m->later($when);
         });
-
-        Log::info('send Email to '. $user->completeName . ' ' . $user->email ,[$res]);
+*/
+        //Log::info('send Email to '. $user->completeName . ' ' . $user->email ,[$res]);
 
     }
 

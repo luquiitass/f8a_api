@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Exceptions\ExepcionValidaciones;
 use App\Models\Util\ReturnJSON;
+use Auth;
 use Carbon\Carbon;
 use DB;
 use Exception;
@@ -130,13 +131,13 @@ class Game extends Model
         $teamL = Team::find($attributes['l_team']);
 
         if($teamL->games->where('date',$attributes['date'])->count() ){
-            throw new Exception('El equipo  ' .  $teamL->name . ' ya se encuentra asociado a un partido en esta fecha. ');
+            throw new Exception('El equipo  ' .  strtoupper($teamL->name) . ' ya se encuentra asociado a un partido en esta fecha. ');
         } 
         
         $teamV = Team::find($attributes['v_team']);
 
         if($teamL->games->where('date',$attributes['date'])->count() ){
-            throw new Exception('El equipo  ' .  $teamV->name . ' ya se encuentra asociado a un partido en esta fecha. ');
+            throw new Exception('El equipo  ' .  strtoupper($teamV->name) . ' ya se encuentra asociado a un partido en esta fecha. ');
         } 
     }
 
@@ -189,12 +190,9 @@ class Game extends Model
 
         //Validaciones;
 
-        $game = parent::create($inputs);
+        $game = Game::create($inputs);
 
-        Email::notifyAdmin(
-            "Se ha creado un partido entre " . $game->team_l->name . " vs " . $game->team_v->name . "para el : " . $game->date,
-            'Nuevo partido'
-        );
+        $game->notificationNewGameToAdmins();
 
 
         //$game->notificationToAdminsNewGame($inputs['team_creator']);
@@ -495,6 +493,29 @@ class Game extends Model
                 'content_id' => $this->id,
                 'autor_table' => 'Team',
                 'autor_id' => $this->team_creator
+            ];
+
+            Notification::create($dataNotification);
+
+        }
+
+    }
+
+    public function notificationNewGameToAdmins(){
+
+        $user =Auth::guard('api')->user();
+
+        foreach(User::where('role','admin')->get() as $admin){
+
+            $dataNotification = [
+                'type' => 'new_game_admin',
+                'user_id' => $admin->id,
+                'title' => '',
+                'route' => '/games/profile/' . $this->id,
+                'content' => 'Game',
+                'content_id' => $this->id,
+                'autor_table' => 'User',
+                'autor_id' => $user->id
             ];
 
             Notification::create($dataNotification);

@@ -57,6 +57,19 @@ class Email extends Model
 
      }
 
+     public function notifyCreateGame(){
+        $users = User::with('teams')->has('teams')->where('email','larrealucas20@gmail.com')->get();
+
+       
+       
+        foreach($users as $user){
+            self::send('emails.createGame',$user,$user,'Créa el partido de la fecha');
+        }
+
+        return 'ok';
+
+    }
+
     /**
      * Funcion para informar a los usuarios administradores de equipos que deben subir los resultados. 
      */

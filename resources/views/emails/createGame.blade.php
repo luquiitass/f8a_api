@@ -15,7 +15,7 @@
             border:1px solid #1f2f47;
             display:inline-block;
             cursor:pointer;
-            color:#ffffff;
+            color:#ffffff !important;
             font-family:Arial;
             font-size:16px;
             padding:9px 29px;

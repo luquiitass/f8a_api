@@ -58,7 +58,7 @@ class Email extends Model
      }
 
      public function notifyCreateGame(){
-        $users = User::with('teams')->has('teams')->where('email','larrealucas20@gmail.com')->get();
+        $users = User::with('teams')->has('teams')->get();
 
        
        

@@ -140,6 +140,16 @@ class User extends Authenticatable
         }
     }
 
+    public function updateTokenMessaging(){
+        $token = request()->get('token');
+
+        if($token){
+            $user = Auth::guard('api')->user();
+            $user->token_messaging = $token;
+            $user->save();
+        }
+    }
+
    public function home()
    {
        $user = Auth::guard('api')->user();

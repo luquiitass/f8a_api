@@ -89,8 +89,8 @@ class Massaging extends Model
             'Content-Type: application/json'
         );
 
-        echo json_encode($fields);
-        echo '<br>';
+        //echo json_encode($fields);
+        //echo '<br>';
 
         $ch = curl_init();
         curl_setopt( $ch,CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send' ); //For firebase, use https://fcm.googleapis.com/fcm/send

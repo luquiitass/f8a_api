@@ -43,11 +43,13 @@ class Massaging extends Model
         $data = [];
 
         foreach($users as $user){
-            $ret = $this->send($title,$text,$user->token_messaging);
-            $data[] = [
-                'user' => $user->completeName,
-                'result' => $ret 
-            ];
+            if(! empty($user->token_messaging)){
+                $ret = $this->send($title,$text,$user->token_messaging);
+                $data[] = [
+                    'user' => $user->completeName,
+                    'result' => $ret 
+                ];
+            }
         }
 
         return $data;

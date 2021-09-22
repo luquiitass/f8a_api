@@ -57,7 +57,7 @@ class Massaging extends Model
 
 
     public function send($title,$text,$token_messaging,$goTo = 'https://futbol8alem.com/#/home/results'){
-        define( 'API_ACCESS_KEY', 'AAAAWNgS9bw:APA91bEsCRBb0Gj4_uKG91K_yDwvMEnkof0nuxKRrnzvfx0SIPTbgHF6fskBRLrSjZ4X34zCebY0Pbo7BfziX1qgDGJ0titxBBILxQfr8VI-iC9mdKXElHWekyoVlNvaUwP9rMK_Fr8h' ); // get API access key from Google/Firebase API's Console
+        $key_app = 'AAAAWNgS9bw:APA91bEsCRBb0Gj4_uKG91K_yDwvMEnkof0nuxKRrnzvfx0SIPTbgHF6fskBRLrSjZ4X34zCebY0Pbo7BfziX1qgDGJ0titxBBILxQfr8VI-iC9mdKXElHWekyoVlNvaUwP9rMK_Fr8h' ; // get API access key from Google/Firebase API's Console
 
         //$registrationIds = array( 'cyMSGTKBzwU:APA91...xMKgjgN32WfoJY6mI' ); //Replace this with your device token
 
@@ -85,7 +85,7 @@ class Massaging extends Model
 
         $headers = array
         (
-            'Authorization: key=' . API_ACCESS_KEY,
+            'Authorization: key=' . $key_app,
             'Content-Type: application/json'
         );
 

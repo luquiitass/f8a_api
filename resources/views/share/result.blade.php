@@ -3,84 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="shortcut icon" href="{{ url('assets/favicon.png')}}" type="image/x-icon" />
+
+    
     
 
     <style>
-        .f{
-            color: white;
+        body{
             width: 500px;
             height: 300px;
+        }
+        .content{
+            color: white;
+            display: inline-flex;
+            width: 500px;
+            height: 300px;
+            /*background-image: url("<?php echo url('assets/bg.jpg') ?>");*/
+            background-color: black;
             background-repeat: no-repeat;
             background-size: cover;
             background-position: center;
-            }
-
-        .avatar {
-            border-radius: 50%;
-            /*background-image: url('avatar.png');*/
-            background-position: center;
-            background-size: cover;
-            height: 64px;
-            width: 64px;
-        }
-        .avatar_event {
-            border-radius: 50%;
-            /*background-image: url('avatar.png');*/
-            background-position: center;
-            background-size: cover;
-            height: 15px;
-            width: 15px;
         }
 
-        .center {
-            display: inline-flex;
-            justify-content: end;
+        .c-team{
+            display: flex;
             align-items: center;
-            /* height: 100%; */
-            width: 100%;
-            margin-top: 20px;
-            }
-
-
-        .l{
-            text-align: center;
-            width: 45%;
         }
-        .v{
-            text-align: center;
-            width: 45%;
+
+        .team{
+            font-size: 30px;
         }
-        .vs{
-            text-align: center;
-            width: 10%;
+
+        .logo{
+            width: 100px;
+            margin: 10px;
+        }
+
+        .f8a{
+            width: 30%;
+            align-items: center;
+            display: flex;
+        }
+
+        .data{
+            display: flow-root;
+            width: 70%;
+            align-self: center;
+        }
+
+        .avatar{
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
         }
 
         .goal{
-            font-size: xx-large;
+            margin-left: 20px;
+            font-weight: 200;
         }
 
-        .list_events{
-            list-style-type: none;
-            text-align: start;
+        .vs{
+            margin-left: 20%;
         }
+
+        .v{
+            margin-left: 40%;
+        }
+
+        .date{
+            text-align: center;;
+        }
+
     </style>
     
 </head>
 <body>
-    <div class="f" id="content">
-        <div class="center">    
+    <div id="content">
+        <div class="content" >
+        <div class="f8a">
+            <img class="logo" src="{{url('assets/favicon.png')}}">
+        </div>
+        <div class="center data">    
             <div class="l">
-                <img class="avatar" src="{{$game->team_l->shield ? $game->team_l->shield ->urlComplete : url('assets/esc.png')}}">
-                <h2>{{$game->team_l->name}}</h2>
-                <h1 class="goal">{{$game->l_goals}}</h1>
+                <div class="c-team">
+                    <img class="avatar" src="{{$game->team_l->shield ? $game->team_l->shield ->urlComplete : url('assets/esc.png')}}">
+                    <h2 class="team">{{$game->team_l->name}}</h2>
+
+                    @if($game->status == "Jugado")
+                        <h1 class="goal">{{$game->l_goals}}</h1>
+                    @endif
+
+                </div>
+                
+              
             </div>
-            <div class="vs">-</div>
+            <div class="vs">{{$game->status == 'Jugado' ? '-' : 'vs'}}</div>
             <div class="v">
-                <img class="avatar" src="{{$game->team_v->shield ? $game->team_v->shield ->urlComplete : url('assets/esc.png')}}">
-                <h2>{{$game->team_v->name}}</h2>
-                <h1 class="goal">{{$game->v_goals}}</h1>
+                <div class="c-team">
+                    <img class="avatar" src="{{$game->team_v->shield ? $game->team_v->shield ->urlComplete : url('assets/esc.png')}}">
+                    <h2 class="team">{{$game->team_v->name}}</h2>
+                    @if($game->status == "Jugado")
+                    <h1 class="goal">{{$game->v_goals}}</h1>
+                    @endif
+                </div>
+              
             </div> 
+            <div class="date">Fecha: {{$game->date}}  a las {{$game->time}}</div>
         </div>
         <div>
                 <div class="l">
@@ -108,8 +137,8 @@
                         @endforeach
                     </ul>
                 </div>
-            </div>
-
+            </div>   
+        </div>
     </div>
     
 </body>
@@ -148,12 +177,16 @@ function printToFile(div) {
     });
 */
     html2canvas(div).then(canvas => {
+        //return;
         //document.body.appendChild(canvas)
-        console.log('test')
+        //let element = document.querySelector("#content").
+        //element.parentNode.removeChild(element);
+        //document.body.appendChild(canvas)
+        //console.log('test')
         var myImage = canvas.toDataURL("image/png");
-        console.log('mi image',myImage)
-        var url = "<?php echo url('api2/methods/Image/create?api_token=ZllhL8MT9UvOv1oX3gR2Y9hHfr4lMq723jc6LXewLyaDAQWrq3') ?>" 
-     
+        //console.log('mi image',myImage)
+        //return;
+        let url = "<?php echo url('api2/runFunctionModel/Game/'.$game->id.'/addPreview'); ?>"
 
         var formData = new FormData();
         formData.append('data', myImage);
@@ -168,11 +201,13 @@ function printToFile(div) {
             processData: false,success: function(response){
                  console.log(response);
                  if(response['status'] = 'success'){
-                     let image = response['Image'];
-                     console.log('image',image);
-                     let new_url = "<?php echo  url('api2/model/Image/') ?>/" + image.id;
-                     console.log('new path' , new_url)
-                     //window.location.href = new_url;
+                     console.log('response ajax', response);
+                     window.location.href = url;
+
+                     //let image = response['Image'];
+                     //console.log('image',image);
+                     //let new_url = "<?php echo  url('api2/model/Image/') ?>/" + image.id;
+                     //console.log('new path' , new_url)
                  }
               },
            });

@@ -23,6 +23,25 @@ class Massaging extends Model
     protected $guarded = [];
 
 
+    public function allUsers(){
+        return User::whereNotNull('token_messaging')->get();
+    }
+
+    public function adminsTeams(){
+        return User::whereNotNull('token_messaging')->with('teams')->has('teams')->get();
+    }
+    
+    public function adminsPlayer(){
+        return User::whereNotNull('token_messaging')->with('player')->has('player')->first();
+    }
+
+    public function findUser(){
+        $id = request()->get('user_id');
+
+        return User::findOrFail($id);
+    }
+
+
     public static function create(array $attributes = [])
     {
 
@@ -33,12 +52,13 @@ class Massaging extends Model
         return $model;
     }
 
+
     public  function  sendMassaging(){
         $title = request()->get('title');
         $text = request()->get('body');
         $url = request()->get('url');
 
-        $users = User::whereNotNull('token_messaging')->get();
+        $users = User::get();
 
         $data = [];
 

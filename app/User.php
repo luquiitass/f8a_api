@@ -29,7 +29,8 @@ class User extends Authenticatable
         'email', 
         'password',
         'api_token',
-        'role'
+        'role',
+        'token_messaging'
     ];
 
     protected $with = ['photo'];
@@ -70,6 +71,11 @@ class User extends Authenticatable
 
     public function payments(){
         return $this->hasMany(Payment::class)->orderBy('id','desc');
+    }
+
+
+    public function scopeHasMessaging($query){
+        return $query->whereNotNull('token_messaging');
     }
    
     public function getCompleteNameAttribute(){

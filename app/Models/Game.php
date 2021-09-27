@@ -33,7 +33,8 @@ class Game extends Model
         'description',
         'date',
         'team_creator',
-        'winner'
+        'winner',
+        'preview_id'
     ];
 
     public $with = ['team_l','team_v','events'];
@@ -50,6 +51,10 @@ class Game extends Model
 
     public function team_v(){
         return $this->belongsTo(Team::class,'v_team','id');
+    }
+
+    public function preview(){
+        return $this->belongsTo(Image::class,'preview_id');
     }
 
     public function events(){
@@ -101,12 +106,11 @@ class Game extends Model
 
     public static function create(array $attributes = [])
     {
-        parent::validCreate($attributes);
+        //parent::validCreate($attributes);
 
         $model = parent::create($attributes);
         $model->setWinner();
         $model->load('team_v','team_l');
-
 
         return  $model;
     }
@@ -157,7 +161,6 @@ class Game extends Model
     public function createGameAdmin(){
         $inputs = request()->all();
 
-        //$this->validCreate($inputs);
 
         if(!empty($inputs['other_team'])){
             $nameNewTeam = $inputs['other_team'];
@@ -529,5 +532,43 @@ class Game extends Model
 
        $data = $team->games->where('date','2021-09-12')->count();   
        return $data; //Game::query()->countGamesOfTeamByDate(55,'2021-09-12');
+   }
+
+
+   public function createPreview(){
+    $ch = curl_init();
+
+    // set URL and other appropriate options
+    curl_setopt($ch, CURLOPT_URL, url('shareResult/'.$this->id));
+    curl_setopt($ch, CURLOPT_HEADER, 0);
+    
+    // grab URL and pass it to the browser
+    curl_exec($ch);
+    
+    // close cURL resource, and free up system resources
+    curl_close($ch);
+   }
+
+   public function addPreview(){
+
+        if(request()->ajax()){
+
+            $inputs = request()->only('url','thumb','data');
+             
+
+            if($this->preview){
+                $this->preview->update($inputs);
+            }else{
+                $image = Image::create($inputs);
+                $this->preview_id = $image->id;
+                $this->save();
+            }
+            return 'ok';
+
+        }
+
+        return $this->load('preview');
+       
+       //return  $this->load('preview');
    }
 }

@@ -13,16 +13,21 @@
             width: 500px;
             height: 300px;
         }
-        .content{
-            color: white;
-            display: inline-flex;
-            width: 500px;
-            height: 300px;
-            /*background-image: url("<?php echo url('assets/bg.jpg') ?>");*/
-            background-color: black;
+
+        .bg{
+            background-image: url("<?php echo url('assets/bg.jpg') ?>");
             background-repeat: no-repeat;
             background-size: cover;
             background-position: center;
+        }
+
+        .content{
+            color: #ffffff;
+            display: inline-flex;
+            width: 500px;
+            height: 300px;
+            /*background-color: black;*/
+
         }
 
         .c-team{
@@ -31,6 +36,7 @@
         }
 
         .team{
+            color: #ffffff;
             font-size: 30px;
         }
 
@@ -80,64 +86,70 @@
 </head>
 <body>
     <div id="content">
+        <div class="bg">
+
         <div class="content" >
-        <div class="f8a">
-            <img class="logo" src="{{url('assets/favicon.png')}}">
-        </div>
-        <div class="center data">    
-            <div class="l">
-                <div class="c-team">
-                    <img class="avatar" src="{{$game->team_l->shield ? $game->team_l->shield ->urlComplete : url('assets/esc.png')}}">
-                    <h2 class="team">{{$game->team_l->name}}</h2>
-
-                    @if($game->status == "Jugado")
-                        <h1 class="goal">{{$game->l_goals}}</h1>
-                    @endif
-
-                </div>
-                
-              
+            <div class="f8a">
+                <img class="logo" src="{{url('assets/favicon.png')}}">
             </div>
-            <div class="vs">{{$game->status == 'Jugado' ? '-' : 'vs'}}</div>
-            <div class="v">
-                <div class="c-team">
-                    <img class="avatar" src="{{$game->team_v->shield ? $game->team_v->shield ->urlComplete : url('assets/esc.png')}}">
-                    <h2 class="team">{{$game->team_v->name}}</h2>
-                    @if($game->status == "Jugado")
-                    <h1 class="goal">{{$game->v_goals}}</h1>
-                    @endif
-                </div>
-              
-            </div> 
-            <div class="date">Fecha: {{$game->date}}  a las {{$game->time}}</div>
-        </div>
-        <div>
+
+            <div class="center data">    
                 <div class="l">
-                    <ul class="list_events">
-                        @foreach($game->events as $e)
-                            @if($e->team_id == $game->team_l->id && $e->typeEvent->name == 'Gol')
-                            <li>
-                                <img class="avatar_event" src="{{url('assets/' . $e->typeEvent->icon)}}">
-                                {{$e->time}}´ 
-                                {{$e->player->name}} 
-                            </li>
-                            @endif
-                        @endforeach
-                    </ul>
+                    <div class="c-team">
+                        <img class="avatar" src="{{$game->team_l->shield ? $game->team_l->shield ->urlComplete : url('assets/esc.png')}}">
+                        <h2 class="team">{{$game->team_l->name}}</h2>
+
+                        @if($game->status == "Jugado")
+                            <h1 class="goal">{{$game->l_goals}}</h1>
+                        @endif
+
+                    </div>
+                    
+                
                 </div>
+                <div class="vs">{{$game->status == 'Jugado' ? '-' : 'vs'}}</div>
                 <div class="v">
-                    <ul class="list_events">
-                        @foreach($game->events as $e)
-                            @if($e->team_id == $game->team_v->id  && $e->typeEvent->name == 'Gol' )
-                            <li>
-                                <img class="avatar_event" src="{{url('assets/' . $e->typeEvent->icon)}}">
-                                {{$e->player->name}} 
-                            </li>
-                            @endif
-                        @endforeach
-                    </ul>
-                </div>
-            </div>   
+                    <div class="c-team">
+                        <img class="avatar" src="{{$game->team_v->shield ? $game->team_v->shield ->urlComplete : url('assets/esc.png')}}">
+                        <h2 class="team">{{$game->team_v->name}}</h2>
+                        @if($game->status == "Jugado")
+                        <h1 class="goal">{{$game->v_goals}}</h1>
+                        @endif
+                    </div>
+                
+                </div> 
+                <div class="date">Fecha: {{$game->date}}  a las {{$game->time}}</div>
+            </div>
+            
+            <div>
+                    <div class="l">
+                        <ul class="list_events">
+                            @foreach($game->events as $e)
+                                @if($e->team_id == $game->team_l->id && $e->typeEvent->name == 'Gol')
+                                <li>
+                                    <img class="avatar_event" src="{{url('assets/' . $e->typeEvent->icon)}}">
+                                    {{$e->time}}´ 
+                                    {{$e->player->name}} 
+                                </li>
+                                @endif
+                            @endforeach
+                        </ul>
+                    </div>
+                    <div class="v">
+                        <ul class="list_events">
+                            @foreach($game->events as $e)
+                                @if($e->team_id == $game->team_v->id  && $e->typeEvent->name == 'Gol' )
+                                <li>
+                                    <img class="avatar_event" src="{{url('assets/' . $e->typeEvent->icon)}}">
+                                    {{$e->player->name}} 
+                                </li>
+                                @endif
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>   
+            </div>
+
         </div>
     </div>
     
@@ -202,7 +214,7 @@ function printToFile(div) {
                  console.log(response);
                  if(response['status'] = 'success'){
                      console.log('response ajax', response);
-                     window.location.href = url;
+                     //window.location.href = url;
 
                      //let image = response['Image'];
                      //console.log('image',image);

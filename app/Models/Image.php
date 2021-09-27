@@ -235,4 +235,9 @@ class Image extends Model
         $im->save();
     }
 
+    public function showImage(){
+        echo '<img src="' . $this->urlComplete . '">';
+        die;
+    }
+
 }

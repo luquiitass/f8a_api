@@ -106,7 +106,7 @@ class Game extends Model
 
     public static function create(array $attributes = [])
     {
-        //parent::validCreate($attributes);
+        parent::validCreate($attributes);
 
         $model = parent::create($attributes);
         $model->setWinner();

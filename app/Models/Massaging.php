@@ -24,7 +24,7 @@ class Massaging extends Model
 
 
     public function allUsers(){
-        return User::whereNotNull('token_messaging')->get();
+        return User::whereNotNull('token_messaging')->where('token_messaging',"!=",'""')->get();
     }
 
     public function adminsTeams(){

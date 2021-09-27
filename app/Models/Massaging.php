@@ -128,6 +128,26 @@ class Massaging extends Model
 
     }
 
+    public function loadedResults(){
+        $users = $this->allUsers();
+
+        $title = 'Ve el resultado de tú Equipo favorito.';
+        $msj = 'Ya se encuentran disponible los resultados de todos los partidos de la fecha 27-Septiembre-2021';
+        $url = 'https://futbol8alem.com/#/home/results';
+
+
+        $data = [];
+        foreach($users as $user ){
+            $res = $this->send($title,$msj,$user->token_messaging,$url);
+
+            $data[] = [
+                'user' => $user->completeName,
+                'result' => $res
+            ];
+        }
+
+        return $data;
+    }
 
         
 }

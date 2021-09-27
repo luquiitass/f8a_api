@@ -15,7 +15,7 @@
         }
 
         .bg{
-            background-image: url("<?php echo url('assets/bg.jpg') ?>");
+            background-image: url("<?php echo asset('assets/bg.jpg') ?>");
             background-repeat: no-repeat;
             background-size: cover;
             background-position: center;
@@ -90,13 +90,13 @@
 
         <div class="content" >
             <div class="f8a">
-                <img class="logo" src="{{url('assets/favicon.png')}}">
+                <img class="logo" src="{{asset('/assets/favicon.png')}}">
             </div>
 
             <div class="center data">    
                 <div class="l">
                     <div class="c-team">
-                        <img class="avatar" src="{{$game->team_l->shield ? $game->team_l->shield ->urlComplete : url('assets/esc.png')}}">
+                        <img class="avatar" src="{{$game->team_l->shield ? $game->team_l->shield ->urlComplete : asset('assets/esc.png')}}">
                         <h2 class="team">{{$game->team_l->name}}</h2>
 
                         @if($game->status == "Jugado")
@@ -110,7 +110,7 @@
                 <div class="vs">{{$game->status == 'Jugado' ? '-' : 'vs'}}</div>
                 <div class="v">
                     <div class="c-team">
-                        <img class="avatar" src="{{$game->team_v->shield ? $game->team_v->shield ->urlComplete : url('assets/esc.png')}}">
+                        <img class="avatar" src="{{$game->team_v->shield ? $game->team_v->shield ->urlComplete : asset('assets/esc.png')}}">
                         <h2 class="team">{{$game->team_v->name}}</h2>
                         @if($game->status == "Jugado")
                         <h1 class="goal">{{$game->v_goals}}</h1>
@@ -127,7 +127,7 @@
                             @foreach($game->events as $e)
                                 @if($e->team_id == $game->team_l->id && $e->typeEvent->name == 'Gol')
                                 <li>
-                                    <img class="avatar_event" src="{{url('assets/' . $e->typeEvent->icon)}}">
+                                    <img class="avatar_event" src="{{asset('assets/' . $e->typeEvent->icon)}}">
                                     {{$e->time}}´ 
                                     {{$e->player->name}} 
                                 </li>
@@ -140,7 +140,7 @@
                             @foreach($game->events as $e)
                                 @if($e->team_id == $game->team_v->id  && $e->typeEvent->name == 'Gol' )
                                 <li>
-                                    <img class="avatar_event" src="{{url('assets/' . $e->typeEvent->icon)}}">
+                                    <img class="avatar_event" src="{{asset('assets/' . $e->typeEvent->icon)}}">
                                     {{$e->player->name}} 
                                 </li>
                                 @endif
@@ -155,7 +155,7 @@
     
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script type="text/javascript" src="{{url('assets/js/html2canvas.min.js')}}"></script>
+<script type="text/javascript" src="{{asset('assets/js/html2canvas.min.js')}}"></script>
 <script>
 
 window.onload = function() {

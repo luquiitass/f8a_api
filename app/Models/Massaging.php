@@ -24,15 +24,15 @@ class Massaging extends Model
 
 
     public function allUsers(){
-        return User::whereNotNull('token_messaging')->get();
+        return User::whereNotNull('token_messaging')->where('token_messaging','!=','')->get();
     }
 
     public function adminsTeams(){
-        return User::whereNotNull('token_messaging')->with('teams')->has('teams')->get();
+        return User::whereNotNull('token_messaging')->where('token_messaging','!=','')->with('teams')->has('teams')->get();
     }
     
     public function adminsPlayer(){
-        return User::whereNotNull('token_messaging')->with('player')->has('player')->first();
+        return User::whereNotNull('token_messaging')->where('token_messaging','!=','')->with('player')->has('player')->first();
     }
 
     public function findUser(){

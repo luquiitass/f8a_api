@@ -10,7 +10,7 @@
 
     <style>
         body{
-            width: 500px;
+            width: 600px;
             height: 300px;
         }
 
@@ -24,7 +24,7 @@
         .content{
             color: #ffffff;
             display: inline-flex;
-            width: 500px;
+            width: 600px;
             height: 300px;
             /*background-color: black;*/
 
@@ -33,6 +33,7 @@
         .c-team{
             display: flex;
             align-items: center;
+            text-shadow: 5px 5px 5px grey;
         }
 
         .team{
@@ -67,6 +68,8 @@
         .goal{
             margin-left: 20px;
             font-weight: 200;
+            text-shadow: 5px 5px 5px grey;
+
         }
 
         .vs{
@@ -74,11 +77,14 @@
         }
 
         .v{
-            margin-left: 40%;
+            margin-left: 30%;
+
         }
 
         .date{
             text-align: center;;
+            text-shadow: 5px 5px 5px grey;
+
         }
 
     </style>
@@ -107,7 +113,7 @@
                     
                 
                 </div>
-                <div class="vs">{{$game->status == 'Jugado' ? '-' : 'vs'}}</div>
+                <div class="vs">{{$game->status == 'Jugado' ? '' : 'vs'}}</div>
                 <div class="v">
                     <div class="c-team">
                         <img class="avatar" src="{{$game->team_v->shield ? $game->team_v->shield ->urlComplete : asset('assets/esc.png')}}">

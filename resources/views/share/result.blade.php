@@ -124,7 +124,7 @@
                     </div>
                 
                 </div> 
-                <div class="date">Fecha: {{$game->date}}  a las {{$game->time}}</div>
+                <div class="date">Fecha: {{ date('d/m/Y', strtotime($game->date))  }}  a las {{ \Carbon\Carbon::createFromFormat('H:i:s',$game->time)->format('h:i')  }}</div>
             </div>
             
             <div>

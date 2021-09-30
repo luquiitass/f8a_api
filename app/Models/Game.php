@@ -535,6 +535,7 @@ class Game extends Model
    }
 
 
+
    public function createPreview(){
     $ch = curl_init();
 
@@ -547,6 +548,7 @@ class Game extends Model
     
     // close cURL resource, and free up system resources
     curl_close($ch);
+    die;
    }
 
    public function addPreview(){

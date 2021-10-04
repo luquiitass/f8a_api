@@ -74,7 +74,7 @@
         .goal{
             margin-left: 20px;
             font-weight: 900;
-            text-shadow: 5px 5px 5px grey;
+            /*text-shadow: 5px 5px 5px grey;*/
             padding-right: 10px;
             background: #1f202199;
             border-radius: 20px;

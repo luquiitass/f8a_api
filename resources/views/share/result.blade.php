@@ -61,6 +61,7 @@
             display: flow-root;
             width: 90%;
             align-self: center;
+            margin-right: 20px;
         }
 
         .avatar{
@@ -82,11 +83,11 @@
         }
 
         .vs{
-            margin-left: 20%;
+            margin-left: 10%;
         }
 
         .v{
-            margin-left: 30%;
+            margin-left: 20%;
 
         }
 
@@ -246,7 +247,7 @@ function printToFile(div) {
     });
 */
     html2canvas(div).then(canvas => {
-        //return;
+        return;
         //document.body.appendChild(canvas)
         //let element = document.querySelector("#content").
         //element.parentNode.removeChild(element);

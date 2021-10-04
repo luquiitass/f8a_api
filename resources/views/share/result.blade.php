@@ -16,7 +16,7 @@
         }
 
         .bg{
-            background-image: url("<?php echo asset('assets/bg.jpg') ?>");
+            background-image: url("<?php echo asset('assets/fondo.png') ?>");
             background-repeat: no-repeat;
             background-size: cover;
             background-position: center;
@@ -44,10 +44,10 @@
         }
 
         .logo{
-            width: 300px;
+            width: 200px;
             position: absolute;
-            top: 10px;
-            right: 10px;
+            bottom: 10px;
+            left: 10px;
             opacity: 0.1;
         }
 

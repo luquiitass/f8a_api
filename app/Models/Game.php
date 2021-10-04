@@ -552,7 +552,8 @@ class Game extends Model
    }
 
    public function addPreview(){
-
+        Log::debug('add preview game');
+        //return 'ok';
         if(request()->ajax()){
 
             $inputs = request()->only('url','thumb','data');

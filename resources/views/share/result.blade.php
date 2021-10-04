@@ -42,8 +42,12 @@
         }
 
         .logo{
-            width: 100px;
-            margin: 10px;
+            width: 300px;
+            position: absolute;
+            top: 90px;
+            left: 0;
+            right: 0px;
+            opacity: 0.1;
         }
 
         .f8a{
@@ -127,7 +131,7 @@
                 <div class="date">Fecha: {{ date('d/m/Y', strtotime($game->date))  }}  a las {{ \Carbon\Carbon::createFromFormat('H:i:s',$game->time)->format('h:i')  }}</div>
             </div>
             
-            <div>
+            <div style="display: none;">
                     <div class="l">
                         <ul class="list_events">
                             @foreach($game->events as $e)
@@ -204,7 +208,8 @@ function printToFile(div) {
         var myImage = canvas.toDataURL("image/png");
         //console.log('mi image',myImage)
         //return;
-        let url = "<?php echo url('api2/runFunctionModel/Game/'.$game->id.'/addPreview'); ?>"
+
+        let url = "<?php echo url('/api2/runFunctionModel/Game/' . $game->id . '/addPreview') ; ?>"
 
         var formData = new FormData();
         formData.append('data', myImage);
@@ -220,7 +225,13 @@ function printToFile(div) {
                  console.log(response);
                  if(response['status'] = 'success'){
                      console.log('response ajax', response);
-                     //window.location.href = url;
+
+
+                     //local
+                     window.location.href = "https://www.facebook.com/sharer?u=<?php echo url('/') ; ?>/shareResultF/<?php echo $game->id; ?>";
+                     
+                     //prod
+                     //window.location.href = `https://www.facebook.com/sharer?u=http://api.futbol8alem.com/shareResultF/${id}`;
 
                      //let image = response['Image'];
                      //console.log('image',image);

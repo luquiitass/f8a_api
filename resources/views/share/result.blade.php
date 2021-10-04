@@ -177,7 +177,7 @@
                 <div class="date">Fecha: {{ date('d/m/Y', strtotime($game->date))  }}  a las {{ \Carbon\Carbon::createFromFormat('H:i:s',$game->time)->format('h:i')  }}</div>
             </div>
             
-            <div style="display: none;">
+            <!-- <div style="display: none;">
                     <div class="l">
                         <ul class="list_events">
                             @foreach($game->events as $e)
@@ -204,7 +204,7 @@
                         </ul>
                     </div>
                 </div>   
-            </div>
+            </div> -->
 
         </div>
     </div>

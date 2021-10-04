@@ -9,7 +9,7 @@
     <meta property="og:url" content="<?php echo 'http://localhost:4200/#/results/profile/' . $game->id ?>" />
     <meta property="og:type" content="article" />
     <meta property="og:title" content="Partido : {{$game->team_l->name}} vs {{$game->team_v->name}}" />
-    <meta property="og:description" content="Fecha {{$game->date}} a las {{$game->time}}" />
+    <meta property="og:description" content="Fecha: {{ date('d/m/Y', strtotime($game->date))  }}  a las {{ \Carbon\Carbon::createFromFormat('H:i:s',$game->time)->format('h:i')  }}" />
     <meta property="og:site_name" content="Fútbol 8 alem" />
 
 
@@ -21,7 +21,7 @@
 
 
 window.onload = function() {
-    window.location.href = "<?php echo 'http://localhost:4200/#/results/profile/' . $game->id ?>"
+    window.location.href = "<?php echo 'https://futbol8alem.com/#/results/profile/' . $game->id ?>"
 
 };
 </script>

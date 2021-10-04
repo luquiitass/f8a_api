@@ -12,6 +12,7 @@
         body{
             width: 600px;
             height: 300px;
+            position: relative;
         }
 
         .bg{
@@ -19,6 +20,7 @@
             background-repeat: no-repeat;
             background-size: cover;
             background-position: center;
+
         }
 
         .content{
@@ -44,21 +46,20 @@
         .logo{
             width: 300px;
             position: absolute;
-            top: 90px;
-            left: 0;
-            right: 0px;
+            top: 10px;
+            right: 10px;
             opacity: 0.1;
         }
 
         .f8a{
-            width: 30%;
+            width: 10%;
             align-items: center;
             display: flex;
         }
 
         .data{
             display: flow-root;
-            width: 70%;
+            width: 90%;
             align-self: center;
         }
 
@@ -86,15 +87,60 @@
         }
 
         .date{
-            text-align: center;;
+            text-align: right;;
             text-shadow: 5px 5px 5px grey;
+            margin-right: 50px;
 
         }
 
+        .loader{
+            position: fixed;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: url('//upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Phi_fenomeni.gif/50px-Phi_fenomeni.gif') 
+                        50% 50% no-repeat rgb(249,249,249);
+        }
+
+        #loading {
+            position: absolute;
+            display: block;
+            width: 100%;
+            height: 100%;
+            top: -1px;
+            left: 0;
+            text-align: center;
+            opacity: 0.7;
+            background-color: #fff;
+            z-index: 99;
+            padding-top: 4%;
+        }
+
+        .se-pre-con {
+            position: fixed;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: url("<?php echo asset('assets/preloader.gif'); ?>" ) left top no-repeat #fff;
+        }
+
+
     </style>
-    
+
 </head>
 <body>
+
+    <div id="loadingg">
+        <img id="loading-image" src="//upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Phi_fenomeni.gif/50px-Phi_fenomeni.gif" alt="Cargando..." />
+        <div>
+        Procesando Imagen...
+        </div>
+    </div>
+
     <div id="content">
         <div class="bg">
 
@@ -162,8 +208,11 @@
 
         </div>
     </div>
+
     
 </body>
+<div class="se-pre-con"></div>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript" src="{{asset('assets/js/html2canvas.min.js')}}"></script>
 <script>

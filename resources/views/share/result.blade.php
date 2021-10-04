@@ -16,7 +16,7 @@
         }
 
         .bg{
-            background-image: url("<?php echo asset('assets/fondo.png') ?>");
+            background-image: url("<?php echo asset('assets/bg.jpg') ?>");
             background-repeat: no-repeat;
             background-size: cover;
             background-position: center;
@@ -44,10 +44,10 @@
         }
 
         .logo{
-            width: 200px;
+            width: 300px;
             position: absolute;
-            bottom: 10px;
-            left: 10px;
+            top: 10px;
+            right: 10px;
             opacity: 0.1;
         }
 
@@ -64,8 +64,8 @@
         }
 
         .avatar{
-            width: 40px;
-            height: 40px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             margin-right: 10px;
         }
@@ -242,7 +242,7 @@ function printToFile(div) {
     });
 */
     html2canvas(div).then(canvas => {
-        //return;
+        return;
         //document.body.appendChild(canvas)
         //let element = document.querySelector("#content").
         //element.parentNode.removeChild(element);
@@ -283,7 +283,7 @@ function printToFile(div) {
                      //let new_url = "<?php echo  url('api2/model/Image/') ?>/" + image.id;
                      //console.log('new path' , new_url)
                  }
-                 document.getElementById('load').style.display = 'none'
+                         document.getElementById('load').style.display = 'block'
 
               },
            });

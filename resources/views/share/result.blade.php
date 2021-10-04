@@ -119,6 +119,7 @@
         }
 
         .se-pre-con {
+            display: none;
             position: fixed;
             left: 0px;
             top: 0px;
@@ -133,13 +134,6 @@
 
 </head>
 <body>
-
-    <div id="loadingg">
-        <img id="loading-image" src="//upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Phi_fenomeni.gif/50px-Phi_fenomeni.gif" alt="Cargando..." />
-        <div>
-        Procesando Imagen...
-        </div>
-    </div>
 
     <div id="content">
         <div class="bg">
@@ -211,7 +205,7 @@
 
     
 </body>
-<div class="se-pre-con"></div>
+<div id="load" class="se-pre-con"></div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript" src="{{asset('assets/js/html2canvas.min.js')}}"></script>
@@ -265,6 +259,8 @@ function printToFile(div) {
         formData.append('url','/results/');
         formData.append('thumb',false);
 
+        document.getElementById('load').style.display = 'block'
+
         $.ajax({
             method:'POST',
             url:url,
@@ -287,6 +283,8 @@ function printToFile(div) {
                      //let new_url = "<?php echo  url('api2/model/Image/') ?>/" + image.id;
                      //console.log('new path' , new_url)
                  }
+                 document.getElementById('load').style.display = 'none'
+
               },
            });
             //create your own dialog with warning before saving file

@@ -72,8 +72,12 @@
 
         .goal{
             margin-left: 20px;
-            font-weight: 200;
+            font-weight: 900;
             text-shadow: 5px 5px 5px grey;
+            padding-right: 10px;
+            background: #1f202199;
+            border-radius: 20px;
+            padding-left: 10px;
 
         }
 
@@ -242,7 +246,7 @@ function printToFile(div) {
     });
 */
     html2canvas(div).then(canvas => {
-        return;
+        //return;
         //document.body.appendChild(canvas)
         //let element = document.querySelector("#content").
         //element.parentNode.removeChild(element);

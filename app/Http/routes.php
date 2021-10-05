@@ -144,7 +144,7 @@ Route::get('shareResult2/{id}', function ($id)
 Route::get('shareResult/{id}', function ($id)
 {
     $game = Game::find($id);
-    return view('/share/result',['game'=>$game])->render();
+    return view('/share/result2',['game'=>$game])->render();
 });
 
 Route::get('shareResultF/{id}', function ($id)

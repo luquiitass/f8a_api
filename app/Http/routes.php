@@ -134,6 +134,13 @@ Route::any('/payment/paid','PaymentController@paid');
 Route::get('functionDeploy/setWinner', 'FunctionsDeployController@setWinner');
 Route::get('/redirect','ShareController@redirect');
 
+Route::get('shareResult2/{id}', function ($id)
+{
+    $game = Game::find($id);
+    return view('/share/result2',['game'=>$game])->render();
+});
+
+
 Route::get('shareResult/{id}', function ($id)
 {
     $game = Game::find($id);

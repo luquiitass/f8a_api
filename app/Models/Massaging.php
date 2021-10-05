@@ -132,7 +132,7 @@ class Massaging extends Model
         $users = $this->allUsers();
 
         $title = 'Ve el resultado de tú Equipo favorito.';
-        $msj = 'Ya se encuentran disponible los resultados de todos los partidos de la fecha 27-Septiembre-2021';
+        $msj = 'Ya se encuentran disponible los resultados de todos los partidos de la fecha.';
         $url = 'https://futbol8alem.com/#/home/results';
 
 

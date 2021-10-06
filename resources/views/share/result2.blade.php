@@ -47,8 +47,8 @@
             opacity: 0.1;
         }
 
-        .text-center-end{
-            align-self: flex-end;
+        .text-center-start{
+            align-self: flex-start;
             text-align: center;
         }
 
@@ -135,7 +135,7 @@
 
                 <div class="row justify-content-centers" style="width: 100%;margin:auto;">
                     
-                    <div class="{{$col}} text-center-end">
+                    <div class="{{$col}} text-center-start">
                         <div>
                             <img class="avatar" src="{{$game->team_l->shield ? $game->team_l->shield ->urlComplete : asset('assets/esc.png')}}">
                         </div>
@@ -147,15 +147,15 @@
                     @if($game->status == 'Jugado')
                         <div class="{{$col}}" style="margin: auto;">
                             <div class="row result">
-                                <div class="col-4 text-center-end goal">
+                                <div class="col-4 text-center-start goal">
                                     {{$game->l_goals}}
                                 </div>
 
-                                <div class="col-4 text-center-end goal">
+                                <div class="col-4 text-center-start goal">
                                     -
                                 </div>
 
-                                <div class="col-4 text-center-end goal">
+                                <div class="col-4 text-center-start goal">
                                     {{$game->v_goals}}
                                 </div>
                             </div>
@@ -164,7 +164,7 @@
                         <div class="col-2 goal vs">vs</div>
                     @endif
                     
-                    <div class="{{$col}} text-center-end">
+                    <div class="{{$col}} text-center-start">
                         <div>
                             <img class="avatar" src="{{$game->team_v->shield ? $game->team_v->shield ->urlComplete : asset('assets/esc.png')}}">
                         </div>
@@ -253,7 +253,7 @@ function printToFile(div) {
     });
 */
     html2canvas(div).then(canvas => {
-        //return;
+        return;
         //document.body.appendChild(canvas)
         //let element = document.querySelector("#content").
         //element.parentNode.removeChild(element);

@@ -109,7 +109,7 @@
         }
 
         .se-pre-con {
-            display: none;
+            /*display: none;*/
             position: fixed;
             left: 0px;
             top: 0px;

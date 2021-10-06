@@ -1,3 +1,8 @@
+<?php
+    $col = $game->status == 'Jugado' ? 'col-4' : 'col-5';
+    $font_size =  $game->status == 'Jugado' ? 'larger' : 'xx-large';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -65,12 +70,14 @@
         .goal{
             font-size: xxx-large;
             font-weight: 700;
+            text-align: center;
+            margin: auto;
         }
 
         .team{
             font-weight: 200;
             font-family: -webkit-body;
-            font-size: larger;
+            font-size: <?php echo $font_size ; ?> ;
             margin-top: 10px;
         }
 
@@ -83,6 +90,22 @@
         }
         .events{
             max-height: 300px;
+        }
+        .result{
+            background: #00000059;
+            border-radius: 10px;
+        }
+        .date{
+            margin-top: 20px;
+            font-family: fantasy;
+            color: #e9eaead4;
+
+        }
+
+        .vs{
+            font-weight: 100;
+            font-size: xx-large;
+            font-family: none;
         }
 
     </style>
@@ -98,8 +121,10 @@
                     <img class="logo" src="{{asset('/assets/favicon.png')}}">
                 </div>
 
+
                 <div class="row justify-content-centers" style="width: 100%;margin:auto;">
-                    <div class="col-4 text-center-end">
+                    
+                    <div class="{{$col}} text-center-end">
                         <div>
                             <img class="avatar" src="{{$game->team_l->shield ? $game->team_l->shield ->urlComplete : asset('assets/esc.png')}}">
                         </div>
@@ -107,18 +132,28 @@
                         {{$game->team_l->name}}
                         </div>
                     </div>
-                    <div class="col-1 text-center-end goal">
-                        {{$game->l_goals}}
-                    </div>
+                    
+                    @if($game->status == 'Jugado')
+                        <div class="{{$col}}" style="margin: auto;">
+                            <div class="row result">
+                                <div class="col-4 text-center-end goal">
+                                    {{$game->l_goals}}
+                                </div>
 
-                    <div class="col-1 text-center-end goal">
-                        :
-                    </div>
+                                <div class="col-4 text-center-end goal">
+                                    -
+                                </div>
 
-                    <div class="col-1 text-center-end goal">
-                        {{$game->v_goals}}
-                    </div>
-                    <div class="col-4 text-center-end">
+                                <div class="col-4 text-center-end goal">
+                                    {{$game->v_goals}}
+                                </div>
+                            </div>
+                        </div>
+                    @else
+                        <div class="col-2 goal vs">vs</div>
+                    @endif
+                    
+                    <div class="{{$col}} text-center-end">
                         <div>
                             <img class="avatar" src="{{$game->team_v->shield ? $game->team_v->shield ->urlComplete : asset('assets/esc.png')}}">
                         </div>
@@ -126,7 +161,14 @@
                             {{$game->team_v->name}}
                         </div>                
                     </div>
+
+                    @if($game->status != 'Jugado')
+                        <div class="col-12 text-center date" >
+                            {{ date('d/m/Y', strtotime($game->date))  }}  a las {{ \Carbon\Carbon::createFromFormat('H:i:s',$game->time)->format('h:i')  }}
+                        </div>
+                    @endif
                 </div>
+
 
                 <!-- <div class="row events" >
                     <div class="col-6">

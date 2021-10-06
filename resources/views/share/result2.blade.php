@@ -253,7 +253,7 @@ function printToFile(div) {
     });
 */
     html2canvas(div).then(canvas => {
-        return;
+        //return;
         //document.body.appendChild(canvas)
         //let element = document.querySelector("#content").
         //element.parentNode.removeChild(element);

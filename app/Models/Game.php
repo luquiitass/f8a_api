@@ -2,11 +2,9 @@
 
 namespace App\Models;
 
-use App\Exceptions\ExepcionValidaciones;
-use App\Models\Util\ReturnJSON;
+
 use Auth;
 use Carbon\Carbon;
-use DB;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Log;
@@ -523,7 +521,10 @@ class Game extends Model
 
             Notification::create($dataNotification);
 
+            Massaging::sendTo($admin,'Partido nuevo',$user->completeName . " ha creado un partido",'https://futbol8alem.com/#/games/profile/' . $this->id);
+
         }
+
 
     }
 

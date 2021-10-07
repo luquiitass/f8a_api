@@ -77,6 +77,11 @@ class Massaging extends Model
 
     }
 
+    public static function sendTo($user ,$title,$text,$goTo){
+        if(! empty($user->token_messaging)){
+            parent::send($title,$text, $user->token_messaging,$goTo);
+        }
+    }
 
     public function send($title,$text,$token_messaging,$goTo = 'https://futbol8alem.com/#/home/results'){
         $key_app = 'AAAAWNgS9bw:APA91bEsCRBb0Gj4_uKG91K_yDwvMEnkof0nuxKRrnzvfx0SIPTbgHF6fskBRLrSjZ4X34zCebY0Pbo7BfziX1qgDGJ0titxBBILxQfr8VI-iC9mdKXElHWekyoVlNvaUwP9rMK_Fr8h' ; // get API access key from Google/Firebase API's Console

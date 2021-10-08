@@ -154,5 +154,26 @@ class Massaging extends Model
         return $data;
     }
 
+    public function showGamesLoaded(){
+        $users = $this->allUsers();
+
+        $title = '¿Sabes contra quien jugara tu equipo favorito?';
+        $msj = 'Ya se encuentra cargado los partidos del Sábado 9, ve contra quien lo hará tu equipo.';
+        $url = 'https://futbol8alem.com/#/home/games';
+
+
+        $data = [];
+        foreach($users as $user ){
+            $res = $this->send($title,$msj,$user->token_messaging,$url);
+
+            $data[] = [
+                'user' => $user->completeName,
+                'result' => $res
+            ];
+        }
+
+        return $data;
+    }
+
         
 }

@@ -129,7 +129,7 @@ class Massaging extends Model
         curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
         $result = curl_exec($ch );
         curl_close( $ch );
-        return $result;
+        return json_decode( $result );
 
     }
 
@@ -146,7 +146,7 @@ class Massaging extends Model
             $res = $this->send($title,$msj,$user->token_messaging,$url);
 
             $data[] = [
-                'user' => $user->completeName,
+                'user' => ['id' => $user->id ,'name' => $user->completeName ],
                 'result' => $res
             ];
         }
@@ -167,7 +167,52 @@ class Massaging extends Model
             $res = $this->send($title,$msj,$user->token_messaging,$url);
 
             $data[] = [
-                'user' => $user->completeName,
+                'user' => ['id' => $user->id ,'name' => $user->completeName ],
+                'result' => $res
+            ];
+        }
+
+        return $data;
+    }
+
+    public function after(){
+        $users = $this->allUsers();
+
+        $title = 'Tercer tiempo';
+        $msj = 'Estas en el el 3° Tiempo??? compártelo con amigos.';
+        $url = 'https://futbol8alem.com/#/home/publications';
+
+
+        $data = [];
+        foreach($users as $user ){
+            $res = $this->send($title,$msj,$user->token_messaging,$url);
+
+            $data[] = [
+                'user' => ['id' => $user->id ,'name' => $user->completeName ],
+                'result' => $res
+            ];
+        }
+
+        return $data;
+    }
+
+    public function adminCreateGame(){
+        $users = $this->allUsers();
+
+        $title = 'Crea el partido';
+        
+        $url = 'https://futbol8alem.com/#/home/games?create=true';
+
+
+        $data = [];
+        foreach($users as $user ){
+
+            $msj = 'Eres administrador de un equipo, no te olvides de registrar el partido de la próxima fecha para que los seguidores sepan contra quien juegan';
+            
+            $res = $this->send($title,$msj,$user->token_messaging,$url);
+
+            $data[] = [
+                'user' => ['id' => $user->id ,'name' => $user->completeName ],
                 'result' => $res
             ];
         }

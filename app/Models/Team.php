@@ -144,6 +144,9 @@ class Team extends Model
 
     //Functions
 
+    public function allTeams(){
+        return parent::orderBy('name')->get();
+    }
 
     public function getAllTeamsSelect(){
         return self::select('id','name')->orderBy('name')->get();

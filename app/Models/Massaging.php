@@ -77,9 +77,17 @@ class Massaging extends Model
 
     }
 
+    public static function sendToUsers($users ,$title,$text,$goTo){
+        $data = [];
+        foreach($users as $user){
+           $data[] = self::sendTo($user,$title,$text,$goTo);
+        }
+        return $data;
+    }
+    
     public static function sendTo($user ,$title,$text,$goTo){
         if(! empty($user->token_messaging)){
-            parent::send($title,$text, $user->token_messaging,$goTo);
+            return parent::send($title,$text, $user->token_messaging,$goTo);
         }
     }
 
@@ -196,8 +204,31 @@ class Massaging extends Model
         return $data;
     }
 
-    public function adminCreateGame(){
+    public function pageFacebook(){
         $users = $this->allUsers();
+
+        $title = 'Pagina de Facebook';
+        $msj = 'Te sugerimos darle Me gusta a nuestra pagina de facebook "Fútbol 8 Alem" donde podrás obtener y compartir datos de la pagina web.';// En la pagina de facebook podrás ver y compartir los partidos, tutoriales, y otros datos de la pagina web.';
+        $url = 'https://futbol8alem.com/#/go-to??url=https://www.facebook.com/Fútbol-8-Alem-1730791230489387';
+        //$url = 'http://192.168.1.15:4200/#/go-to??url=https://www.facebook.com/Fútbol-8-Alem-1730791230489387';
+
+ 
+        $data = [];
+        foreach($users as $user ){
+            $res = $this->send($title,$msj,$user->token_messaging,$url);
+
+            $data[] = [
+                'user' => ['id' => $user->id ,'name' => $user->completeName ],
+                'result' => $res
+            ];
+        }
+
+        return $data;
+    }
+
+    public function adminCreateGame(){
+
+        $users = $this->adminsTeams();
 
         $title = 'Crea el partido';
         

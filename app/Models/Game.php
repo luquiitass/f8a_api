@@ -110,6 +110,9 @@ class Game extends Model
         $model->setWinner();
         $model->load('team_v','team_l');
 
+        parent::messagingFaforitesCreateGame($model->team_l);
+        parent::messagingFaforitesCreateGame($model->team_v);
+
         return  $model;
     }
 
@@ -482,6 +485,17 @@ class Game extends Model
         }
     }
 
+    public function messagingFaforitesCreateGame($team){
+        $title = '';
+        $url = 'https://futbol8alem.com/#/games/profile/' . $this->id;
+
+        $users = $team->favorites;;
+
+        $text  = $team->name . " ha registrado un nuevo partido.";
+
+        return Massaging::sendToUsers($users,$title,$text,$url);
+    }
+
     public function notificationNewTeamInGame(){
 
 
@@ -531,11 +545,11 @@ class Game extends Model
     }
 
    public function test(){
-       $team = Team::find(55);
+        //return $this->team_l->favorites;
+        //$this->messagingFaforitesCreateGame($this->team_v);
+        //$this->messagingFaforitesCreateGame($this->team_l);
 
-       $data = $team->games->where('date','2021-09-12')->count();   
-       return $data; //Game::query()->countGamesOfTeamByDate(55,'2021-09-12');
-   }
+    }
 
 
 

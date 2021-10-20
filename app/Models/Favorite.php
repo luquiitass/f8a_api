@@ -12,7 +12,7 @@ class Favorite extends Model
 {
     protected $table = 'favorites';
 
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
         'table_id',

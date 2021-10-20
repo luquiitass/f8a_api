@@ -142,6 +142,10 @@ class Team extends Model
         return $this->belongsToMany(Player::class)->with('photo')->withTimestamps()->wherePivot('current',1);
     }
 
+    public function favorites(){
+        return $this->belongsToMany(User::class,'favorites','table_id')->withPivot(['table_name'])->wherePivot('table_name','Team');
+    }
+
     //Functions
 
     public function allTeams(){

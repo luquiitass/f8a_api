@@ -18,7 +18,8 @@ class Team extends Model
     protected $fillable = [
         'name',
         'shield_id',
-        'cover_page_id'
+        'cover_page_id',
+        'amount_balance'
     ];
 
     protected $with = ['shield','coverPage','admins'];
@@ -146,6 +147,20 @@ class Team extends Model
         return $this->belongsToMany(User::class,'favorites','table_id')->withPivot(['table_name'])->wherePivot('table_name','Team');
     }
 
+    public function amontsBalance(){
+        return $this->hasMany(AmountBalance::class);
+    }
+
+    public function amontBalance(){
+        return $this->hasOne(AmountBalance::class); // TODO : modificar consulta para obtener  el monto actual que se cobrara la cuota
+    }
+
+    public function balanceSheets(){
+        return $this->hasMany(BalanceSheet::class)->with(['user' => function($query){
+            return $query->orderBy('last_name','desc');
+        }]);
+    }
+
     //Functions
 
     public function allTeams(){
@@ -186,6 +201,13 @@ class Team extends Model
 
 
         return $this;
+    }
+
+    public function pageBalanceSheet()
+    {
+        //dd( $this->balanceSheets );
+        //$this->balance_sheets = $this->balanceSheets->sortBy('user.first_name');
+        return $this->load('balanceSheets');
     }
 
     public function removePlayer()
@@ -251,6 +273,17 @@ class Team extends Model
         ->orWhere(function($q){
             $q->doesnthave('admins');
         })->get();
+    }
+
+
+     /**
+     * Añadir un mes a todos los integrantes de un equipo
+     */
+
+    public function addMonthPaidToAll(){
+        foreach( $this->balanceSheets as  $balanceSheet ){
+            $balanceSheet->createNextMonthPaid();
+        }
     }
 
 }

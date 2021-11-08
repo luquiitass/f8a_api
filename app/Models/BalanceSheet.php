@@ -31,6 +31,7 @@ class BalanceSheet extends Model
     ];
 
     protected $with=['monthsPaid','balancePayments'];
+    protected $appends = ['total'];
 
 
     protected $guarded = [];
@@ -54,6 +55,10 @@ class BalanceSheet extends Model
     public function balancePayments()
     {
         return $this->hasMany(BalancePayment::class);
+    }
+
+    public function getTotalAttribute(){
+        return $this->balance_old + $this->balance;
     }
 
 

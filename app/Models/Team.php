@@ -151,14 +151,23 @@ class Team extends Model
         return $this->hasMany(AmountBalance::class);
     }
 
-    public function amontBalance(){
-        return $this->hasOne(AmountBalance::class); // TODO : modificar consulta para obtener  el monto actual que se cobrara la cuota
+    public function balanceSheets(){
+        return $this->hasMany(BalanceSheet::class)->with('user');
     }
 
-    public function balanceSheets(){
-        return $this->hasMany(BalanceSheet::class)->with(['user' => function($query){
-            return $query->orderBy('last_name','desc');
-        }]);
+    public function balancePayments(){
+        
+        return $this->hasManyThrough(BalancePayment::class,BalanceSheet::class)->with('balanceSheet')->with('user');
+
+    }
+
+
+    public function expenses(){
+        return $this->hasMany(Expense::class)->where('type','expense');//->orderBy('date','asc');
+    }
+
+    public function entrys(){
+        return $this->hasMany(Expense::class)->where('type','entry');//->orderBy('date','asc');
     }
 
     //Functions
@@ -209,6 +218,37 @@ class Team extends Model
         //$this->balance_sheets = $this->balanceSheets->sortBy('user.first_name');
         return $this->load('balanceSheets');
     }
+
+    public function pageExpenses(){
+        return $this->load('expenses.user');
+    }
+
+    public function pageEntrys(){
+        return $this->load('entrys.user');
+    }
+
+    public function pageAccounting(){
+        $this->totalBalancePayments = $this->balancePayments->sum('amount');
+        $this->totalExpense = $this->expenses->sum('amount');
+        $this->totalEntry = $this->entrys->sum('amount');
+        $this->totlaPendingFees= $this->balanceSheets()
+                                        ->select(DB::raw(' * ,balance_old + balance as total'))
+                                        //->where('total','<',0)
+                                        ->get()
+                                        ->filter(function($item, $key){
+                                            return $item->total < 0;
+                                        })
+                                        ->sum('total');
+
+        $this->cash = ($this->totalBalancePayments + $this->totalEntry )  - $this->totalExpense;
+
+        return $this;
+    }
+
+    public function pagePayments(){
+        return $this->load('balancePayments');
+    }
+
 
     public function removePlayer()
     {

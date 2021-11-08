@@ -42,6 +42,10 @@ class Event extends Model
         return $this->belongsTo(Team::class);
     }
 
+    public function game(){
+        return $this->belongsTo(Game::class);
+    }
+
     public static function create(array $attributes = [])
     {
 
@@ -81,5 +85,7 @@ class Event extends Model
         return $data;
         # code...
     }
+
+    
     
 }

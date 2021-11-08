@@ -157,6 +157,21 @@ class Player extends Model
         return self::paginate(20);
     }
 
+    public function pageEvents(){
+        $event = request('event');
+        if(! $event){
+            $this['events'] = $this->events()->with('game','typeEvent')->get();
+        }else{
+            $this['events'] = $this->events()
+                                    ->with('game','typeEvent')
+                                    ->whereHas('typeEvent', function($query) use ($event){
+                                        return $query->where('name',$event);
+                                    })
+                                    ->get();
+        }
+        return $this;
+    }
+
 
     public function sendNotification(){
 

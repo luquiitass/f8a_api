@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use DB;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -112,6 +113,10 @@ class Team extends Model
     {
         \Log::info('methods delete team');
 
+        if($this->players->count() > 0){
+            throw new Exception('El equipo tiene jugadores aociados');
+        }
+
         if($this->shield_id){
             \Log::info('with shield id ->delete');
             $this->shield->delete();
@@ -122,6 +127,8 @@ class Team extends Model
 
             $this->coverPage->delete();
         }
+
+        
     }
 
     //Relations

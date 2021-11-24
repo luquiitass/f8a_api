@@ -32,7 +32,8 @@ class Game extends Model
         'date',
         'team_creator',
         'winner',
-        'preview_id'
+        'preview_id',
+        'field_id'
     ];
 
     public $with = ['team_l','team_v','events'];
@@ -45,6 +46,10 @@ class Game extends Model
     public function team_l()
     {
         return $this->belongsTo(Team::class,'l_team','id');
+    }
+
+    public function field(){
+        return $this->belongsTo(Field::class);
     }
 
     public function team_v(){
@@ -453,6 +458,7 @@ class Game extends Model
     public function dataProfile()
     {
         $this->events;
+        $this->field;
         $this['oldGame'] = $this->oldGame;
 
         return $this;

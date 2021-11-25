@@ -360,4 +360,10 @@ class Team extends Model
         return $field;
     }
 
+    public function removeField(){
+        if($this->field){
+            $this->field->delete();
+        }
+    }
+
 }

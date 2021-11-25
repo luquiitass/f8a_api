@@ -137,6 +137,10 @@ class Team extends Model
         return $this->belongsTo(Image::class,'shield_id');
     }
 
+    public function field(){
+        return $this->hasOne(Field::class);
+    }
+
     public function coverPage(){
         return $this->belongsTo(Image::class,'cover_page_id');
     }
@@ -184,13 +188,14 @@ class Team extends Model
     }
 
     public function getAllTeamsSelect(){
-        return self::select('id','name')->orderBy('name')->get();
+        return self::select('id','name')->orderBy('name')->with('field')->get();
     }
 
     public function pageProfile(){
         $this->getIsFavoriteAttribute();
         $this->players;
         $this->comments;
+        $this->field;
         $this->oldGame = $this->oldGame;
         $this->nextGame = $this->nextGame;
         $this['statistics'] = $this->statistics;
@@ -331,6 +336,28 @@ class Team extends Model
         foreach( $this->balanceSheets as  $balanceSheet ){
             $balanceSheet->createNextMonthPaid();
         }
+    }
+
+    public function addField(){
+        $id = request('field_id');
+
+        $field = Field::find($id);
+
+        if( !empty($field->team_id) && $field->team_id != $this->id )
+            throw new Exception('Esta cancha ya pertenece a un equipo');
+
+        if(! empty($this->field)){
+            $this->field->team_id = NULL;
+            $this->field->save();
+        }
+
+
+        $field->team_id = $this->id;
+        $field->save();
+
+        $this->save();
+
+        return $field;
     }
 
 }

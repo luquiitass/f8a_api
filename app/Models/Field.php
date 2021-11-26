@@ -16,7 +16,7 @@ class Field extends Model
 
     protected $table = 'fields';
 
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
         'name',

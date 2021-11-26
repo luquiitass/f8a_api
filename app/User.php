@@ -49,7 +49,7 @@ class User extends Authenticatable
     ];
 
     public function teams(){
-        return $this->belongsToMany(Team::class)->orderBy('name');
+        return $this->belongsToMany(Team::class)->with('field')->orderBy('name');
     }
 
     public function player(){

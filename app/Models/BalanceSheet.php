@@ -31,6 +31,7 @@ class BalanceSheet extends Model
     ];
 
     protected $with=['monthsPaid','balancePayments'];
+    
     protected $appends = ['total'];
 
 

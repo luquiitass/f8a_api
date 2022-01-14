@@ -78,10 +78,16 @@ class Massaging extends Model
     }
 
     public static function sendToUsers($users ,$title,$text,$goTo){
-        $data = [];
+        $data= [];
+
         foreach($users as $user){
-           $data[] = self::sendTo($user,$title,$text,$goTo);
+           $res = self::sendTo($user,$title,$text,$goTo);
+           $data[] =  [
+                'user' => ['id' => $user->id ,'name' => $user->completeName ],
+                'result' => $res
+            ];
         }
+        
         return $data;
     }
     
@@ -151,7 +157,7 @@ class Massaging extends Model
 
         $data = [];
         foreach($users as $user ){
-            $res = $this->send($title,$msj,$user->token_messaging,$url);
+            $res = $this->sendTo($user,$title,$msj,$url);
 
             $data[] = [
                 'user' => ['id' => $user->id ,'name' => $user->completeName ],
@@ -172,7 +178,7 @@ class Massaging extends Model
 
         $data = [];
         foreach($users as $user ){
-            $res = $this->send($title,$msj,$user->token_messaging,$url);
+            $res = $this->sendTo($user,$title,$msj,$url);
 
             $data[] = [
                 'user' => ['id' => $user->id ,'name' => $user->completeName ],
@@ -193,7 +199,7 @@ class Massaging extends Model
 
         $data = [];
         foreach($users as $user ){
-            $res = $this->send($title,$msj,$user->token_messaging,$url);
+            $res = $this->sendTo($user,$title,$msj,$url);
 
             $data[] = [
                 'user' => ['id' => $user->id ,'name' => $user->completeName ],
@@ -215,7 +221,7 @@ class Massaging extends Model
  
         $data = [];
         foreach($users as $user ){
-            $res = $this->send($title,$msj,$user->token_messaging,$url);
+            $res = $this->sendTo($user,$title,$msj,$url);
 
             $data[] = [
                 'user' => ['id' => $user->id ,'name' => $user->completeName ],
@@ -240,7 +246,7 @@ class Massaging extends Model
 
             $msj = 'Eres administrador de un equipo, no te olvides de registrar el partido de la próxima fecha para que los seguidores sepan contra quien juegan';
             
-            $res = $this->send($title,$msj,$user->token_messaging,$url);
+            $res = $this->sendTo($user,$title,$msj,$url);
 
             $data[] = [
                 'user' => ['id' => $user->id ,'name' => $user->completeName ],
@@ -251,5 +257,37 @@ class Massaging extends Model
         return $data;
     }
 
+    
+    public function addResultGames(){
+        $games = Game::todayPendingGames(); 
+        $data = [];
+
+        foreach($games as $game){
+            $data = [];
+            if($game->team_l){
+                $data = array_merge($data , $this->setResultGame($game->team_l) );
+            }
+
+            if($game->team_v){
+                $data = array_merge($data ,  $this->setResultGame($game->team_v) );
+            }
+        }
+
+        return $data;
+    }
+
+
+    public function setResultGame($team){
+
+
+        $title = 'Cargar resultado.';
+        $url = 'https://futbol8alem.com/#/results/profile/' . $this->id;
+
+        $users = $team->admins;
+
+        $text  = "Ya puedes ingresar el resultado del partido de " . $team->name;
+
+        return Massaging::sendToUsers($users,$title,$text,$url);
+    }
         
 }

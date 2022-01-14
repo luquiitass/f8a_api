@@ -65,6 +65,9 @@ class Publication extends Model
         $model->comments_count = $model->comments->count();
         $model->likes_count = $model->likes->count();
         $model->liked;
+
+        $model->notificationAllUsers();
+
         return $model;
     }
 
@@ -78,6 +81,8 @@ class Publication extends Model
         $this->comments_count = $this->comments->count();
         $this->likes_count = $this->likes->count();
         $this->liked;
+
+        
 
         return $this;
     }
@@ -176,6 +181,21 @@ class Publication extends Model
             $not = Notification::create($data);
 
         }
+    }
+
+    public function notificationAllUsers(){
+        $users = User::get();
+        $user = Auth::guard('api')->user();
+
+
+        $title = 'Nueva publicación';
+
+        $text = $user->completeName . " a realizado una publicación en 3° Tiempo";
+
+        $url = "https://futbol8alem.com/#/home/publications";
+
+        Massaging::sendToUsers($users,$title,$text,$url);
+        
     }
         
 }

@@ -360,6 +360,20 @@ class Game extends Model
             ->get();
     }
 
+    public static function todayPendingGames(){
+        $date = Carbon::now();
+
+        return self::query()
+        ->where('date',$date->format('Y-m-d'))
+        ->where(function($query)
+        {
+            return $query->where('status','Pendiente');
+        })
+        ->orderBy('time')
+        ->get();
+
+    }
+
 
     public function pageAdminAll(){
         $dateInit = Carbon::now()->addMonth(-1);
@@ -492,6 +506,7 @@ class Game extends Model
         }
     }
 
+
     public function messagingFaforitesCreateGame($team){
         $title = '';
         $url = 'https://futbol8alem.com/#/games/profile/' . $this->id;
@@ -499,6 +514,17 @@ class Game extends Model
         $users = $team->favorites;;
 
         $text  = $team->name . " ha registrado un nuevo partido.";
+
+        return Massaging::sendToUsers($users,$title,$text,$url);
+    }
+
+    public function messagingSetResultGame($team){
+        $title = 'Cargar resultado.';
+        $url = 'https://futbol8alem.com/#/results/profile/' . $this->id;
+
+        $users = $team->admins;
+
+        $text  = "Ya puedes ingresar el resultado del partido de " . $team->name;
 
         return Massaging::sendToUsers($users,$title,$text,$url);
     }

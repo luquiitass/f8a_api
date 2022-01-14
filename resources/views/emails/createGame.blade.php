@@ -46,12 +46,12 @@
         </ul>
     @endif
     <div class="alert alert-info">
-        Puedes crear partidos de las siguientes fechas, No importa el orden.
+        Puedes crear partidos de las siguientes fechas.
     <div>
 
     <h3>Ingresa al siguiente link para registrar tu partido </h3>
 
-    <a class="myButton" href="https://futbol8alem.com/#/home/games?create=true" > Crear Partido</a>
+    <a class="myButton" href="https://futbol8alem.com/#/home/games?create=true" >Crear Partido</a>
     
 </body>
 </html> 

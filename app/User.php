@@ -207,7 +207,7 @@ class User extends Authenticatable
 
    function pageNotifications(){
        
-       return $this->notifications;
+       return $this->notifications()->paginate(20);
    }
 
    public function changesNotifications(){

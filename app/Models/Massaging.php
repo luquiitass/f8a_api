@@ -81,7 +81,9 @@ class Massaging extends Model
         $data= [];
 
         foreach($users as $user){
-           $res = self::sendTo($user,$title,$text,$goTo);
+           
+            $res = self::sendTo($user,$title,$text,$goTo);
+
            $data[] =  [
                 'user' => ['id' => $user->id ,'name' => $user->completeName ],
                 'result' => $res
@@ -110,7 +112,6 @@ class Massaging extends Model
                 'body'         => $text,
                 'icon'=>'https://futbol8alem.com/assets/icon/favicon.png',
                 'click_action'=>$goTo
-
         );
 
         $data = [
@@ -165,6 +166,8 @@ class Massaging extends Model
             ];
         }
 
+        //Email::showResults('','Resultados cargados');
+
         return $data;
     }
 
@@ -185,6 +188,7 @@ class Massaging extends Model
                 'result' => $res
             ];
         }
+
 
         return $data;
     }

@@ -25,8 +25,9 @@ Route::get('/', function () {
 Route::any('/prueba', function () {
     //echo '<img src="'. url('imagecache/medium/3jfVvZb89Dmx66E.jpeg') .'">';
     //$sub =\App\Models\Team::findOrFail(1);
-    return 'hola';
+    //return 'hola';
     //DB::table('teams')->where('id', 29)->delete();
+    return view('emails.results');
 });
 
 

@@ -60,8 +60,6 @@ class Email extends Model
      public function notifyCreateGame(){
         $users = User::with('teams')->has('teams')->get();
 
-       
-       
         foreach($users as $user){
             self::send('emails.createGame',$user,$user,'Créa el partido de la fecha');
         }
@@ -83,6 +81,14 @@ class Email extends Model
 
         foreach($admins as $admin){
             parent::sendText($message,$admin,$subject);
+        }
+    }
+
+    public static function showResults($message='',$subject = ''){
+        $users = User::where('role','admin')->get();
+
+        foreach($users as $user){
+            parent::send('emails.results',$message,$user,$subject);
         }
     }
 

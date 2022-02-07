@@ -47,6 +47,11 @@ class Team extends Model
         return $this->hasMany(Game::class,'v_team')->orWhere('l_team',$this->id);
     }
 
+    public function redes()
+    {
+        return $this->hasMany(Red::class,'model_id','id')->where('name_model','Team');
+    }
+
     public function getNextGameAttribute(){
         $date  = date('Y-m-d');
         //$time = date('H:i:s');
@@ -196,6 +201,7 @@ class Team extends Model
         $this->players;
         $this->comments;
         $this->field;
+        $this->redes;
         $this->oldGame = $this->oldGame;
         $this->nextGame = $this->nextGame;
         $this['statistics'] = $this->statistics;

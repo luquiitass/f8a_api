@@ -85,7 +85,7 @@ class Email extends Model
     }
 
     public static function showResults($message='',$subject = ''){
-        $users = User::where('role','admin')->get();
+        $users = User::where('role','user')->get();
 
         foreach($users as $user){
             parent::send('emails.results',$message,$user,$subject);

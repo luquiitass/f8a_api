@@ -604,7 +604,8 @@ class Game extends Model
    public function addPreview(){
         Log::debug('add preview game');
         //return 'ok';
-        if(request()->ajax()){
+        if(request()->isMethod('post')){
+            Log::debug('is post');
 
             $inputs = request()->only('url','thumb','data');
              
@@ -616,8 +617,10 @@ class Game extends Model
                 $this->preview_id = $image->id;
                 $this->save();
             }
-            return 'ok';
+            return $this->load('preview');
 
+        }else{
+            Log::debug('no ajax');
         }
 
         return $this->load('preview');

@@ -7,6 +7,7 @@ use App\Http\Requests\LoginRequest;
 use App\Models\Util\AjaxQuery;
 use App\Models\Util\ReturnJSON;
 use Auth;
+use Log;
 
 /**
  * Created by PhpStorm.
@@ -82,6 +83,8 @@ trait TraitAjaxConsultas
             ], 401);
 
         $user = $request->user();
+
+        Log::debug('nuevo login de ' . $user->completeName .'  email:'. $user->email );
 
         return response()->json([
             'status' => 'success',

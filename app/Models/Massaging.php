@@ -3,7 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Log;
+use stdClass;
 
 /**
  * Class Cliente
@@ -24,15 +25,15 @@ class Massaging extends Model
 
 
     public function allUsers(){
-        return User::whereNotNull('token_messaging')->where('token_messaging','!=','')->get();
+        return User::/*whereNotNull('token_messaging')->where('token_messaging','!=','')*/get();
     }
 
     public function adminsTeams(){
-        return User::whereNotNull('token_messaging')->where('token_messaging','!=','')->with('teams')->has('teams')->get();
+        return User::/*whereNotNull('token_messaging')->where('token_messaging','!=','')->*/with('teams')->has('teams')->get();
     }
     
     public function adminsPlayer(){
-        return User::whereNotNull('token_messaging')->where('token_messaging','!=','')->with('player')->has('player')->first();
+        return User::/*whereNotNull('token_messaging')->where('token_messaging','!=','')->*/with('player')->has('player')->first();
     }
 
     public function findUser(){
@@ -77,12 +78,12 @@ class Massaging extends Model
 
     }
 
-    public static function sendToUsers($users ,$title,$text,$goTo){
+    public static function sendToUsers($users ,$title,$text,$goTo,$viewEmail = 'default'){
         $data= [];
 
         foreach($users as $user){
            
-            $res = self::sendTo($user,$title,$text,$goTo);
+            $res = self::sendTo($user,$title,$text,$goTo,$viewEmail);
 
            $data[] =  [
                 'user' => ['id' => $user->id ,'name' => $user->completeName ],
@@ -93,10 +94,18 @@ class Massaging extends Model
         return $data;
     }
     
-    public static function sendTo($user ,$title,$text,$goTo){
+    public static function sendTo($user ,$title,$text,$goTo,$viewEmail = 'default'){
+        $result = null;
         if(! empty($user->token_messaging)){
-            return parent::send($title,$text, $user->token_messaging,$goTo);
+            $result  = parent::send($title,$text, $user->token_messaging,$goTo);
         }
+
+        if(($result == null || $result->success == 0) && $viewEmail != 'noEmail'){
+            Log::alert('No tiene token o no ha sido enviada correctamente la notificación');
+            return self::sendEmail($viewEmail,$user,$title,$text,$goTo);
+        }
+
+        return $result;
     }
 
     public function send($title,$text,$token_messaging,$goTo = 'https://futbol8alem.com/#/home/results'){
@@ -171,17 +180,38 @@ class Massaging extends Model
         return $data;
     }
 
+    public static function sendEmail($view ,$user,$subject,$text,$goTo){
+
+        $email = new Email();
+        $ob = new stdClass();
+
+
+        if($view == 'default'){
+            Log::alert('Enviando email por defecto (text)');
+
+            $ob->success =  $email->sendText($text,$user,$subject);
+        }else{
+            Log::alert('enviando email personalizado');
+
+            $ob->success =  $email->send($view,["text" => $text, "goTo"=>$goTo],$user,$subject);
+        }
+        return $ob;
+    }
+
     public function showGamesLoaded(){
         $users = $this->allUsers();
 
+        $fechaSabado = date('D') == 'Sat' ? date('d',strtotime('now')) : date('d',strtotime('next Saturday'));
+
+
         $title = '¿Sabes contra quien jugara tu equipo favorito?';
-        $msj = 'Ya se encuentra cargado los partidos del Sábado 9, ve contra quien lo hará tu equipo.';
+        $msj = 'Ya se encuentra cargado los partidos del Sábado '. $fechaSabado .', ve contra quien lo hará tu equipo.';
         $url = 'https://futbol8alem.com/#/home/games';
 
 
         $data = [];
         foreach($users as $user ){
-            $res = $this->sendTo($user,$title,$msj,$url);
+            $res = $this->sendTo($user,$title,$msj,$url,'emails.showGames');
 
             $data[] = [
                 'user' => ['id' => $user->id ,'name' => $user->completeName ],
@@ -203,7 +233,7 @@ class Massaging extends Model
 
         $data = [];
         foreach($users as $user ){
-            $res = $this->sendTo($user,$title,$msj,$url);
+            $res = $this->sendTo($user,$title,$msj,$url,'emails.newPublication');
 
             $data[] = [
                 'user' => ['id' => $user->id ,'name' => $user->completeName ],
@@ -269,11 +299,11 @@ class Massaging extends Model
         foreach($games as $game){
             $data = [];
             if($game->team_l){
-                $data = array_merge($data , $this->setResultGame($game->team_l) );
+                $data = array_merge($data , $this->setResultGame($game , $game->team_l) );
             }
 
             if($game->team_v){
-                $data = array_merge($data ,  $this->setResultGame($game->team_v) );
+                $data = array_merge($data ,  $this->setResultGame($game , $game->team_v) );
             }
         }
 
@@ -281,17 +311,17 @@ class Massaging extends Model
     }
 
 
-    public function setResultGame($team){
+    public function setResultGame($game ,$team){
 
 
         $title = 'Cargar resultado.';
-        $url = 'https://futbol8alem.com/#/results/profile/' . $this->id;
+        $url = 'https://futbol8alem.com/#/results/profile/' . $game->id;
 
         $users = $team->admins;
 
         $text  = "Ya puedes ingresar el resultado del partido de " . $team->name;
 
-        return Massaging::sendToUsers($users,$title,$text,$url);
+        return Massaging::sendToUsers($users,$title,$text,$url,'emails.loadResult');
     }
         
 }

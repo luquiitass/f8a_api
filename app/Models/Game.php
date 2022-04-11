@@ -103,6 +103,7 @@ class Game extends Model
                                 ->where('l_team',$game->v_team);
                         });
                     })
+                    ->orderBy('date','desc')
                     ->first();
     }
 
@@ -127,7 +128,7 @@ class Game extends Model
 
         $model =  parent::update($attributes, $options);
 
-       $this->setWinner();
+        $this->setWinner();
 
         return $model;
     }
@@ -515,7 +516,7 @@ class Game extends Model
 
         $text  = $team->name . " ha registrado un nuevo partido.";
 
-        return Massaging::sendToUsers($users,$title,$text,$url);
+        return Massaging::sendToUsers($users,$title,$text,$url,'noEmail');
     }
 
     public function messagingSetResultGame($team){
@@ -526,7 +527,7 @@ class Game extends Model
 
         $text  = "Ya puedes ingresar el resultado del partido de " . $team->name;
 
-        return Massaging::sendToUsers($users,$title,$text,$url);
+        return Massaging::sendToUsers($users,$title,$text,$url,'noEmail');
     }
 
     public function notificationNewTeamInGame(){
@@ -570,7 +571,7 @@ class Game extends Model
 
             Notification::create($dataNotification);
 
-            Massaging::sendTo($admin,'Partido nuevo',$user->completeName . " ha creado un partido",'https://futbol8alem.com/#/games/profile/' . $this->id);
+            Massaging::sendTo($admin,'Partido nuevo',$user->completeName . " ha creado un partido",'https://futbol8alem.com/#/games/profile/' . $this->id,'noEmail');
 
         }
 

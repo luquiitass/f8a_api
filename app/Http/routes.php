@@ -27,7 +27,10 @@ Route::any('/prueba', function () {
     //$sub =\App\Models\Team::findOrFail(1);
     //return 'hola';
     //DB::table('teams')->where('id', 29)->delete();
-    return view('emails.results');
+    //$fechaSabado = date('D') == 'Sat' ? date('d',strtotime('now')) : date('d',strtotime('next Saturday'));
+    $data = null;
+    
+    return $data;
 });
 
 

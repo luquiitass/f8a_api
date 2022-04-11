@@ -88,6 +88,9 @@ class AuthController extends Controller
 
         $user = $request->user();
 
+        Log::info('nuevo login' , $user);
+
+
         return response()->json([
             'User' => $user,
             'api_token' => $user->api_token
@@ -129,6 +132,9 @@ class AuthController extends Controller
             //Auth::guard('api')->login($newUser, true);
 
         }
+
+        Log::info('nuevo login' , $user);
+
 
         return  ReturnJSON::success([
             'User' => $user,

@@ -107,14 +107,14 @@ class Email extends Model
         });
 
         Log::info('send Email to '. $user->completeName . ' ' . $user->email ,[$res]);
-
+        return $res;
     }
 
     public function sendText($text,$user,$subject){
 
         
 
-        $job = new SendReminderEmail(SendReminderEmail::EmailNotifyAdmin,[
+        /*$job = new SendReminderEmail(SendReminderEmail::EmailNotifyAdmin,[
             'text'=>$text,
             'user'=>$user,
             'subject'=> $subject
@@ -123,14 +123,16 @@ class Email extends Model
         //$job->delay(60);
 
         $this->dispatch($job);
-
-        /*$res =  Mail::queue('emails.text',['text'=>$text], function ($m) use ($user,$subject) {
+        */
+        $res = Mail::send('emails.text',['text'=>$text], function ($m) use ($user,$subject) {
             //$m->from("example@gmail.com", 'Fútbol8 Alem');
             $m->to($user->email, $user->email)->subject($subject);
             //$m->later($when);
         });
-*/
-        //Log::info('send Email to '. $user->completeName . ' ' . $user->email ,[$res]);
+
+        Log::info('send Email to '. $user->completeName . ' ' . $user->email ,[$res]);
+
+        return $res;
 
     }
 

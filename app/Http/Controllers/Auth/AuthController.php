@@ -88,7 +88,7 @@ class AuthController extends Controller
 
         $user = $request->user();
 
-        Log::info('nuevo login' , $user);
+        //Log::info('nuevo login' , $user);
 
 
         return response()->json([
@@ -133,7 +133,7 @@ class AuthController extends Controller
 
         }
 
-        Log::info('nuevo login' , $user);
+        //Log::info('nuevo login' , $user);
 
 
         return  ReturnJSON::success([

@@ -28,9 +28,36 @@ Route::any('/prueba', function () {
     //return 'hola';
     //DB::table('teams')->where('id', 29)->delete();
     //$fechaSabado = date('D') == 'Sat' ? date('d',strtotime('now')) : date('d',strtotime('next Saturday'));
-    $data = null;
+    /*$data = "null";
+
+    $numPivot = 0;
+    $i=0;
+    $pre = 0;
+    $pivot = 0; 
+    $post = 0;
+    while($numPivot <= 10){
+        $i++;
+        $pre = $pre + $i;
+
+        if($pre ==  ($i+2) + ($i+3) ){
+            $data = "Primer numero encontrado es " . ($i + 1);
+            $numPivot = 20;
+        }else if( $pre > $post){
+            while($pre < $post){
+
+            }
+        }
+
+        if($i > 10){
+            $data = 'No funca';
+            $numPivot = 20;
+        }
+    }
+
     
-    return $data;
+    */
+    
+    return App::environment('local') ? 'local' : 'prod';
 });
 
 

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App;
 use Illuminate\Database\Eloquent\Model;
 use Log;
 use stdClass;
@@ -24,15 +25,25 @@ class Massaging extends Model
     protected $guarded = [];
 
 
-    public function allUsers(){
+    public static function allUsers(){
+        if(App::environment('local')){
+            return User::where('email','larrealucas20@gmail.com')->/*whereNotNull('token_messaging')->where('token_messaging','!=','')*/get();
+        }
         return User::/*whereNotNull('token_messaging')->where('token_messaging','!=','')*/get();
     }
 
-    public function adminsTeams(){
+    public static function adminsTeams(){
+        if(App::environment('local')){
+            User::where('email','larrealucas20@gmail.com')->with('teams')->has('teams')->get();
+        }
         return User::/*whereNotNull('token_messaging')->where('token_messaging','!=','')->*/with('teams')->has('teams')->get();
     }
     
-    public function adminsPlayer(){
+    public static function adminsPlayer(){
+        if(App::environment('local')){
+            return User::where('email','larrealucas20@gmail.com')->/*whereNotNull('token_messaging')->where('token_messaging','!=','')->*/with('player')->has('player')->first();
+        }
+
         return User::/*whereNotNull('token_messaging')->where('token_messaging','!=','')->*/with('player')->has('player')->first();
     }
 

@@ -116,8 +116,9 @@ class Game extends Model
         $model->setWinner();
         $model->load('team_v','team_l');
 
-        parent::messagingFaforitesCreateGame($model->team_l);
-        parent::messagingFaforitesCreateGame($model->team_v);
+        //parent::messagingFaforitesCreateGame($model->team_l);
+        //parent::messagingFaforitesCreateGame($model->team_v);
+        $model->messagingNewGame();
 
         return  $model;
     }
@@ -515,6 +516,17 @@ class Game extends Model
         $users = $team->favorites;;
 
         $text  = $team->name . " ha registrado un nuevo partido.";
+
+        return Massaging::sendToUsers($users,$title,$text,$url,'noEmail');
+    }
+
+    public function messagingNewGame(){
+        $title = 'Nuevo Partido';
+        $url = 'https://futbol8alem.com/#/games/profile/' . $this->id;
+
+        $users = User::get();
+
+        $text  = $this->team_l->name . " vs " . $this->team_v->name;
 
         return Massaging::sendToUsers($users,$title,$text,$url,'noEmail');
     }

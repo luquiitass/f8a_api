@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\TraitCategory;
 use Auth;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,6 +11,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Player extends Model
 {
+    use TraitCategory;
+
     protected $table = 'players';
 
     public $timestamps = true;
@@ -24,7 +27,8 @@ class Player extends Model
         'weight',
         'position_id',
         'photo_id',
-        'user_id'
+        'user_id',
+        'category_id'
     ];
 
     protected $with = ['user','photo','position'];
@@ -34,6 +38,10 @@ class Player extends Model
 
     public function user(){
         return $this->belongsTo(User::class);
+    }
+
+    public function category(){
+        return $this->belongsTo(Category::class);
     }
 
     public function photo(){
@@ -61,6 +69,7 @@ class Player extends Model
     public static function create(array $attributes = [])
     {
 
+        $attributes['category_id'] = parent::getCategoryId();
 
         $model = parent::create($attributes);
 
@@ -154,7 +163,7 @@ class Player extends Model
 
     public function pageHomePlayers(){
         
-        return self::paginate(20);
+        return self::where('category_id',$this->getCategoryId())->paginate(20);
     }
 
     public function pageEvents(){

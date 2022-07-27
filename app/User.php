@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Helpers\TraitCategory;
+use App\Models\Category;
 use App\Models\Image;
 use App\Models\Notification;
 use App\Models\Payment;
@@ -18,6 +20,7 @@ use stdClass;
 
 class User extends Authenticatable
 {
+    use TraitCategory;
     /**
      * The attributes that are mass assignable.
      *
@@ -48,8 +51,15 @@ class User extends Authenticatable
         'password', 'remember_token','api_token'
     ];
 
+    public function category(){
+        return $this->belongsTo(Category::class);
+    }
+
     public function teams(){
-        return $this->belongsToMany(Team::class)->with('field')->orderBy('name');
+        return $this->belongsToMany(Team::class)
+                    ->where('category_id',$this->getCategoryId())
+                    ->with('field')
+                    ->orderBy('name');
     }
 
     public function player(){
@@ -172,6 +182,7 @@ class User extends Authenticatable
        //$user->notifications;
        $user->teams;
        $user->player;
+       $user->category;
 
        return $user;
    }
@@ -186,6 +197,13 @@ class User extends Authenticatable
                     ->select(DB::raw('CONCAT(last_name," ", first_name ," (" ,email ,")" ) AS text ,id'))
                     ->with('player')
                     ->get();
+   }
+
+   function setCategory(){
+    $this->category_id = request()->get('id');
+    $this->save();
+    $this->load('category');
+    return $this;
    }
    
 

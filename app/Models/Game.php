@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-
+use App\Helpers\TraitCategory;
 use Auth;
 use Carbon\Carbon;
 use Exception;
@@ -14,6 +14,7 @@ use Log;
  */
 class Game extends Model
 {
+    use TraitCategory;
     protected $table = 'games';
 
     public $timestamps = true;
@@ -33,7 +34,8 @@ class Game extends Model
         'team_creator',
         'winner',
         'preview_id',
-        'field_id'
+        'field_id',
+        'category_id'
     ];
 
     public $with = ['team_l','team_v','events'];
@@ -41,6 +43,10 @@ class Game extends Model
 
     public function comments(){
         return $this->belongsToMany(Comment::class);
+    }
+
+    public function category(){
+        return $this->belongsTo(Category::class);
     }
 
     public function team_l()
@@ -110,6 +116,9 @@ class Game extends Model
 
     public static function create(array $attributes = [])
     {
+
+        $attributes['category_id'] = parent::getCategoryId();
+
         parent::validCreate($attributes);
 
         $model = parent::create($attributes);
@@ -118,6 +127,8 @@ class Game extends Model
 
         //parent::messagingFaforitesCreateGame($model->team_l);
         //parent::messagingFaforitesCreateGame($model->team_v);
+
+        //if($model->isNextSaturday())
         $model->messagingNewGame();
 
         return  $model;
@@ -181,7 +192,8 @@ class Game extends Model
             }
             
             $newTeam = new Team([
-                'name' => $nameNewTeam
+                'name' => $nameNewTeam,
+                'category_id' => $this->getCategoryId()
             ]);
 
             $newTeam->save();
@@ -302,6 +314,7 @@ class Game extends Model
 
     public function getGamesByDate($date){
         return self::query()
+            ->where('category_id',$this->getCategoryId())
             ->where('date',$date)
             ->withCount(['comments'])
             ->where(function($query)
@@ -320,6 +333,7 @@ class Game extends Model
         //return [$now , $dateEnd];
         
         $dates = self::select('date')
+                ->where('category_id',$this->getCategoryId())
                 ->where('date', '>=' ,$now->format('Y-m-d'))
                 ->where('date', '<=' ,$dateEnd->format('Y-m-d'))
                 ->where(function($query)
@@ -412,6 +426,7 @@ class Game extends Model
             /*->with(['events' => function($q){
                 $q->limit(2);
             }])*/
+            ->where('category_id',$this->getCategoryId())
             ->where(function($query)
             {
                 return $query->where('status','Jugado')
@@ -427,6 +442,7 @@ class Game extends Model
         //return $dateInit;
         
         $dates = self::select('date')
+                ->where('category_id',$this->getCategoryId())
                 ->where('date', '<=' ,$now->format('Y-m-d'))
                 ->where('date', '>=' ,$dateInit->format('Y-m-d'))
                 ->where(function($query)
@@ -521,6 +537,8 @@ class Game extends Model
     }
 
     public function messagingNewGame(){
+
+
         $title = 'Nuevo Partido';
         $url = 'https://futbol8alem.com/#/games/profile/' . $this->id;
 
@@ -590,14 +608,6 @@ class Game extends Model
 
     }
 
-   public function test(){
-        //return $this->team_l->favorites;
-        //$this->messagingFaforitesCreateGame($this->team_v);
-        //$this->messagingFaforitesCreateGame($this->team_l);
-
-    }
-
-
 
    public function createPreview(){
     $ch = curl_init();
@@ -639,5 +649,25 @@ class Game extends Model
         return $this->load('preview');
        
        //return  $this->load('preview');
+   }
+
+   /**
+    * Verifica si el el partido se llevara a cabo el siguinte sabado
+    * @return Boolean
+    */
+   public function isFirstSaturday(){
+       
+    $now = Carbon::now()->startOfDay();
+
+    //Verifica si la fecha del partido es mayor o igual a la fecha actual
+    if($now <= $this->date){
+       
+        //Verifica si la fecha del partido es menor p igual a la fecha del proximo sabado 
+        if($this->date->startOfDay()->lte($now->next(6)) ){
+            return true;
+        }
+    }
+
+    return false;
    }
 }

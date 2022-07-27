@@ -2,10 +2,12 @@
 
 namespace App\Http\Requests;
 
+use App\Helpers\TraitCategory;
 use App\Http\Requests\Request;
 
 class TeamStoreRequest extends Request
 {
+    use TraitCategory;
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -24,7 +26,7 @@ class TeamStoreRequest extends Request
     public function rules()
     {
         return [
-            'name'=>'required|min:3|unique:teams,name'
+            'name'=>'required|min:3|unique:teams,name,NULL,id,category_id,' . $this->getCategoryId()
         ];
     }
 }

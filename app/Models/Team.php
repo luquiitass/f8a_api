@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\TraitCategory;
 use Carbon\Carbon;
 use DB;
 use Exception;
@@ -12,6 +13,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Team extends Model
 {
+    use TraitCategory;
+
     protected $table = 'teams';
 
     public $timestamps = true;
@@ -20,7 +23,8 @@ class Team extends Model
         'name',
         'shield_id',
         'cover_page_id',
-        'amount_balance'
+        'amount_balance',
+        'category_id'
     ];
 
     protected $with = ['shield','coverPage','admins'];
@@ -30,6 +34,10 @@ class Team extends Model
     ];
 
     protected $guarded = [];
+
+    public function category(){
+        return $this->belongsTo(Category::class);
+    }
 
     public function getIsFavoriteAttribute(){
             return $this->isFavorite = ! empty($this->favorite);
@@ -93,11 +101,19 @@ class Team extends Model
 
     public static function create(array $attributes = [])
     {
+        try{
+        DB::beginTransaction();
+
+        $attributes['category_id'] = parent::getCategoryId();
 
         $model = parent::create($attributes);
 
         $model->updateAdmins($attributes);
-
+        DB::commit();
+        }catch(Exception $e){
+            throw $e;
+            DB::rollBack();
+        }
         return $model;
     }
 
@@ -193,7 +209,10 @@ class Team extends Model
     }
 
     public function getAllTeamsSelect(){
-        return self::select('id','name')->orderBy('name')->with('field')->get();
+        return self::select('id','name')
+                    ->orderBy('name')
+                    ->where('category_id',$this->getCategoryId())
+                    ->with('field')->get();
     }
 
     public function pageProfile(){
@@ -280,7 +299,7 @@ class Team extends Model
     private function updateAdmins($attributes){
         $admins = $attributes['admins'];
 
-        if(! empty($admins)){
+        if(! empty($admins) && is_array($admins)){
             $ids = [];
             foreach($admins as $admin){
                 $ids[] = $admin['id']; 
@@ -291,7 +310,7 @@ class Team extends Model
     }
 
     public function pageHomeTeams(){
-        return $this->orderBy('name','asc')->get();
+        return $this->where('category_id',$this->getCategoryId())->orderBy('name','asc')->get();
     }
 
 
@@ -316,7 +335,7 @@ class Team extends Model
 
         //return $name;
 
-        $result = Team::where('name', $name)->first();
+        $result = Team::where('category_id',$this->getCategoryId())->where('name', $name)->first();
 
         return $result;
 

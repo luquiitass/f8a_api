@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Log;
 use Mail;
+use PHPUnit\Framework\Test;
 
 /**
  * Class Cliente
@@ -75,12 +76,16 @@ class Email extends Model
 
     }
 
+    public function test(){
+        $this->notifyAdmin('Test','Test queue');
+    }
+
 
     public static function notifyAdmin($message,$subject = ''){
         $admins = User::where('role','admin')->get();
 
         foreach($admins as $admin){
-            parent::sendText($message,$admin,$subject);
+            parent::send('emails.text',["text"=>$message],$admin,$subject);
         }
     }
 
@@ -101,7 +106,7 @@ class Email extends Model
        $viewRender = ['view' => view($view,$data)->render()];
        
         
-        $res =  Mail::send($view,$data, function ($m) use ($user,$subject) {
+        $res =  Mail::queue($view,$data, function ($m) use ($user,$subject) {
             //$m->from("example@gmail.com", 'Fútbol8 Alem');
             $m->to($user->email, $user->email)->subject($subject);
         });

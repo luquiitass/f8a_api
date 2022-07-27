@@ -6,6 +6,6 @@
     <title>Document</title>
 </head>
 <body>
-    {{$text}}
+    {{$data['text']}}
 </body>
 </html>

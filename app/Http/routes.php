@@ -23,41 +23,20 @@ Route::get('/', function () {
 });
 
 Route::any('/prueba', function () {
-    //echo '<img src="'. url('imagecache/medium/3jfVvZb89Dmx66E.jpeg') .'">';
-    //$sub =\App\Models\Team::findOrFail(1);
-    //return 'hola';
-    //DB::table('teams')->where('id', 29)->delete();
-    //$fechaSabado = date('D') == 'Sat' ? date('d',strtotime('now')) : date('d',strtotime('next Saturday'));
-    /*$data = "null";
 
-    $numPivot = 0;
-    $i=0;
-    $pre = 0;
-    $pivot = 0; 
-    $post = 0;
-    while($numPivot <= 10){
-        $i++;
-        $pre = $pre + $i;
-
-        if($pre ==  ($i+2) + ($i+3) ){
-            $data = "Primer numero encontrado es " . ($i + 1);
-            $numPivot = 20;
-        }else if( $pre > $post){
-            while($pre < $post){
-
-            }
-        }
-
-        if($i > 10){
-            $data = 'No funca';
-            $numPivot = 20;
-        }
-    }
-
+    $dateGame = \Carbon\Carbon::createFromFormat('Y-m-d', '2022-5-13');
     
-    */
-    
-    return App::environment('local') ? 'local' : 'prod';
+    $game = new Game([
+        'date' => $dateGame
+    ]);
+    //$game->date = $dateGame;
+
+    return  $game->isFirstSaturday() ? 'Se juega el proximo sabado' : 'No se juega el prodimo sabado';
+    //$from = \Carbon\Carbon::now();
+
+    //return $to >= $from ? 'true' : 'false';
+
+    return date('d - m - Y',strtotime('next wednesday'));
 });
 
 

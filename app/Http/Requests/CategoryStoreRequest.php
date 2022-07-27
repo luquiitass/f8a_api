@@ -2,12 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Helpers\TraitCategory;
 use App\Http\Requests\Request;
 
-class TeamUpdateRequest extends Request
+class CategoryStoreRequest extends Request
 {
-    use TraitCategory;
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -25,13 +23,9 @@ class TeamUpdateRequest extends Request
      */
     public function rules()
     {
-
-        $id = request()->get('id');
-
-        //dd($id);
         return [
-            'name'=>'required|min:3|unique:teams,name,' .$id .',id,category_id,' .  $this->getCategoryId()
-
+            //'start' => 'required',
+            'name' => 'required',
         ];
     }
 }

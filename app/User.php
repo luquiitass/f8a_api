@@ -51,6 +51,8 @@ class User extends Authenticatable
         'password', 'remember_token','api_token'
     ];
 
+
+
     public function category(){
         return $this->belongsTo(Category::class);
     }
@@ -183,7 +185,7 @@ class User extends Authenticatable
        $user->teams;
        $user->player;
        $user->category;
-
+       
        return $user;
    }
 

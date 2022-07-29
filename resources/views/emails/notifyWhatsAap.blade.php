@@ -15,7 +15,7 @@
         <ul class="list-group">
         @foreach($data->teams as $team)
             <li class="list-group-item">
-                <a href="https://futbol8alem.com/#/team/profile/{{$team->id}}">{{$team->name}}</li>
+                <a href="https://futbol-alem.com/#/team/profile/{{$team->id}}">{{$team->name}}</li>
         @endforeach
         </ul>
     @endif

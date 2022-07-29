@@ -36,7 +36,7 @@
 <body>
     <h1>Ya se encuentran registrados los resultados de la fecha.</h1>
 
-    <a class="myButton" href="https://futbol8alem.com/#/home/results" >Ver partidos</a>
+    <a class="myButton" href="https://futbol-alem.com/#/home/results" >Ver partidos</a>
     
 </body>
 </html> 

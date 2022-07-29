@@ -24,7 +24,8 @@ class Team extends Model
         'shield_id',
         'cover_page_id',
         'amount_balance',
-        'category_id'
+        'category_id',
+        'paid_up_to'
     ];
 
     protected $with = ['shield','coverPage','admins'];

@@ -16,7 +16,7 @@ class ShareController extends Controller
         $env = App::environment();
         //dd($env);
 
-        $url_base = $env == 'local' ? 'http://192.168.1.15:4200/' : "https://futbol8alem.com/" ;
+        $url_base = $env == 'local' ? 'http://192.168.1.15:4200/' : "https://futbol-alem.com/" ;
 
         $url = request()->get('url');
 

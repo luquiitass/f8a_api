@@ -119,7 +119,7 @@ class Massaging extends Model
         return $result;
     }
 
-    public function send($title,$text,$token_messaging,$goTo = 'https://futbol8alem.com/#/home/results'){
+    public function send($title,$text,$token_messaging,$goTo = 'https://futbol-alem.com/#/home/results'){
         $key_app = 'AAAAWNgS9bw:APA91bEsCRBb0Gj4_uKG91K_yDwvMEnkof0nuxKRrnzvfx0SIPTbgHF6fskBRLrSjZ4X34zCebY0Pbo7BfziX1qgDGJ0titxBBILxQfr8VI-iC9mdKXElHWekyoVlNvaUwP9rMK_Fr8h' ; // get API access key from Google/Firebase API's Console
 
         //$registrationIds = array( 'cyMSGTKBzwU:APA91...xMKgjgN32WfoJY6mI' ); //Replace this with your device token
@@ -130,7 +130,7 @@ class Massaging extends Model
         (
                 'title'     => $title,
                 'body'         => $text,
-                'icon'=>'https://futbol8alem.com/assets/icon/favicon.png',
+                'icon'=>'https://futbol-alem.com/assets/icon/favicon.png',
                 'click_action'=>$goTo
         );
 
@@ -173,7 +173,7 @@ class Massaging extends Model
 
         $title = 'Ve el resultado de tú Equipo favorito.';
         $msj = 'Ya se encuentran disponible los resultados de todos los partidos de la fecha.';
-        $url = 'https://futbol8alem.com/#/home/results';
+        $url = 'https://futbol-alem.com/#/home/results';
 
 
         $data = [];
@@ -217,7 +217,7 @@ class Massaging extends Model
 
         $title = '¿Sabes contra quien jugara tu equipo favorito?';
         $msj = 'Ya se encuentra cargado los partidos del Sábado '. $fechaSabado .', ve contra quien lo hará tu equipo.';
-        $url = 'https://futbol8alem.com/#/home/games';
+        $url = 'https://futbol-alem.com/#/home/games';
 
 
         $data = [];
@@ -239,7 +239,7 @@ class Massaging extends Model
 
         $title = 'Tercer tiempo';
         $msj = 'Estas en el el 3° Tiempo??? compártelo con amigos.';
-        $url = 'https://futbol8alem.com/#/home/publications';
+        $url = 'https://futbol-alem.com/#/home/publications';
 
 
         $data = [];
@@ -260,7 +260,7 @@ class Massaging extends Model
 
         $title = 'Pagina de Facebook';
         $msj = 'Te sugerimos darle Me gusta a nuestra pagina de facebook "Fútbol 8 Alem" donde podrás obtener y compartir datos de la pagina web.';// En la pagina de facebook podrás ver y compartir los partidos, tutoriales, y otros datos de la pagina web.';
-        $url = 'https://futbol8alem.com/#/go-to??url=https://www.facebook.com/Fútbol-8-Alem-1730791230489387';
+        $url = 'https://futbol-alem.com/#/go-to??url=https://www.facebook.com/Fútbol-8-Alem-1730791230489387';
         //$url = 'http://192.168.1.15:4200/#/go-to??url=https://www.facebook.com/Fútbol-8-Alem-1730791230489387';
 
  
@@ -283,7 +283,7 @@ class Massaging extends Model
 
         $title = 'Crea el partido';
         
-        $url = 'https://futbol8alem.com/#/home/games?create=true';
+        $url = 'https://futbol-alem.com/#/home/games?create=true';
 
 
         $data = [];
@@ -326,7 +326,7 @@ class Massaging extends Model
 
 
         $title = 'Cargar resultado.';
-        $url = 'https://futbol8alem.com/#/results/profile/' . $game->id;
+        $url = 'https://futbol-alem.com/#/results/profile/' . $game->id;
 
         $users = $team->admins;
 

@@ -527,7 +527,7 @@ class Game extends Model
 
     public function messagingFaforitesCreateGame($team){
         $title = '';
-        $url = 'https://futbol8alem.com/#/games/profile/' . $this->id;
+        $url = 'https://futbol-alem.com/#/games/profile/' . $this->id;
 
         $users = $team->favorites;;
 
@@ -540,7 +540,7 @@ class Game extends Model
 
 
         $title = 'Nuevo Partido';
-        $url = 'https://futbol8alem.com/#/games/profile/' . $this->id;
+        $url = 'https://futbol-alem.com/#/games/profile/' . $this->id;
 
         $users = User::get();
 
@@ -551,7 +551,7 @@ class Game extends Model
 
     public function messagingSetResultGame($team){
         $title = 'Cargar resultado.';
-        $url = 'https://futbol8alem.com/#/results/profile/' . $this->id;
+        $url = 'https://futbol-alem.com/#/results/profile/' . $this->id;
 
         $users = $team->admins;
 
@@ -601,7 +601,7 @@ class Game extends Model
 
             Notification::create($dataNotification);
 
-            Massaging::sendTo($admin,'Partido nuevo',$user->completeName . " ha creado un partido",'https://futbol8alem.com/#/games/profile/' . $this->id,'noEmail');
+            Massaging::sendTo($admin,'Partido nuevo',$user->completeName . " ha creado un partido",'https://futbol-alem.com/#/games/profile/' . $this->id,'noEmail');
 
         }
 

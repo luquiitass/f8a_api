@@ -192,7 +192,7 @@ class Publication extends Model
 
         $text = $user->completeName . " a realizado una publicación en 3° Tiempo";
 
-        $url = "https://futbol8alem.com/#/home/publications";
+        $url = "https://futbol-alem.com/#/home/publications";
 
         Massaging::sendToUsers($users,$title,$text,$url);
         

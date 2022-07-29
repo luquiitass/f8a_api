@@ -41,7 +41,7 @@
         <ul class="list-group">
         @foreach($data->teams as $team)
             <li class="list-group-item">
-                <a href="https://futbol8alem.com/#/team/profile/{{$team->id}}">{{$team->name}}</li>
+                <a href="https://futbol-alem.com/#/team/profile/{{$team->id}}">{{$team->name}}</li>
         @endforeach
         </ul>
     @endif
@@ -51,7 +51,7 @@
 
     <h3>Ingresa al siguiente link para registrar tu partido </h3>
 
-    <a class="myButton" href="https://futbol8alem.com/#/home/games?create=true" >Crear Partido</a>
+    <a class="myButton" href="https://futbol-alem.com/#/home/games?create=true" >Crear Partido</a>
     
 </body>
 </html> 

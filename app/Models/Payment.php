@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Database\Eloquent\Model;
 use Log;
 use MercadoPago;
@@ -14,6 +15,29 @@ use MercadoPago;
  */
 class Payment extends Model
 {
+    const PLANS = array(
+        1 => [
+            "id" => 1,
+            "name" => '2 Mes',
+            "info" => 'El pago sera por un mes',
+            "countMonths" => 2,
+            "amount" => 300,
+        ],
+        2 => [
+            "id" => 2,
+            "name" => '6 Meses',
+            "info" => 'El pago sera por 6 meses',
+            "countMonths" => 6,
+            "amount" => 600,
+        ],
+        3 => [
+            "id" => 3,
+            "name" => '12 Meses',
+            "info" => 'El pago sera por un año',
+            "countMonths" => 12,
+            "amount" => 1200,
+        ]
+        );
 
     protected $table = 'payments';
 
@@ -62,39 +86,59 @@ class Payment extends Model
 
 
 
-    public function createPayment(Team $team){
+    public function createPayment($user, Team $team, $plan ){
 
         MercadoPago\SDK::setAccessToken(config('services.mp.private_key_test'));
 
         // Crea un objeto de preferencia
         $preference = new MercadoPago\Preference();
 
-        $price = 500;
+        $price = $plan['amount'];
+        $mounths = $plan['countMonths'] ;
+        $plan_name = $plan['name'] ;
 
         // Crea un ítem en la preferencia
         $item = new MercadoPago\Item();
-        $item->title = 'Registro de Equipo ' . $team->name;
+        $item->title = 'Suscripción de  ' . $team->name . ' por ' . $mounths . ' meses';
         $item->quantity = 1;
         $item->unit_price = $price;
         $item->currency_id = "ARS";
         $preference->items = array($item);
 
         $preference->back_urls = array(
-            "success" => "https://api.futbol8alem.com/payment/success",
-            "failure" => "https://api.futbol8alem.com/payment/failure",
-            "pending" => "https://api.futbol8alem.com/payment/pending"
+            "success" => "https://api.futbol-alem.com/payment/success",
+            "failure" => "https://api.futbol-alem.com/payment/failure",
+            "pending" => "https://api.futbol-alem.com/payment/pending"
         );  
+
+
         $preference->auto_return = "approved";
 
+        //$preference->payer->name = $user->completeName;
+        //$preference->payer->email = $user->email;
+
+        $preference->notification_url = 'https://api.futbol-alem.com/payment/notification';// Enviar notificación al usuario; 
+
         $preference->save();
+
+        $dateStart = date('Y-m-d');
+        
+        $dateEnd = date('Y-m-d', strtotime('+' . $mounths . ' months' ,  strtotime($dateStart) ) );
+
     
         $payment = Payment::create([
             'status' => 'created',
+            'plan_name' => $plan_name,
             'amount' => $price,
+            'mounths' => $mounths,
             'preference_id' => $preference->id,
             'type' => 'START', 
             'team_id' => $team->id,
-            'detail' => 'Pago por suscripcion mensual para administradores de un Equipo'
+            'detail' => 'Pago por suscripción de un Equipo',
+            'start' => $dateStart,
+            'end' => $dateEnd,
+            'preference_json' => json_encode($preference),
+            'user_id' => $user->id
         ]);
 
 
@@ -110,7 +154,8 @@ class Payment extends Model
         $team_id = request()->get('team_id');
         $team = Team::find($team_id);
         $user = \Auth::guard('api')->user();
-
+        $paln_id = request('plan_id'); 
+        $plan = self::PLANS[$paln_id];
 
         $payment = self::where('team_id', $team_id)->where(function($query){
                             return $query->where('status','created')
@@ -122,7 +167,7 @@ class Payment extends Model
                         
 
         if(empty($payment)){
-            $payment = $this->createPayment($team);
+            $payment = $this->createPayment($user , $team,$plan);
         }
 
         $payment->user_id = $user->id;
@@ -147,13 +192,14 @@ class Payment extends Model
             $payment->payment_json = json_encode($inputs);
 
             $date = Carbon::now();
-            $date_end = Carbon::now()->addMonth();
+            $date_end = Carbon::now()->addMonth($payment->mounths);
 
             $payment->start = $date;
             $payment->end = $date_end;
             
             $payment->save();
             $payment->team->paid = 1;
+            $payment->team->paid_up_to = $date_end;
             $payment->team->save();
 
             
@@ -230,7 +276,7 @@ class Payment extends Model
             
 
             $payment->sendNotificationFailure();
-            dd($payment);
+            //dd($payment);
             //Enviar Notificacion , email de pago 
         }
 
@@ -293,6 +339,10 @@ class Payment extends Model
         ];
 
         Notification::create($dataPublication);
+    }
+
+    public function api_getPlans(){
+        return  self::PLANS ;
     }
         
 }

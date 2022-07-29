@@ -287,7 +287,7 @@ function printToFile(div) {
                      window.location.href = "https://www.facebook.com/sharer?u=<?php echo url('/') ; ?>/shareResultF/<?php echo $game->id; ?>";
                      
                      //prod
-                     //window.location.href = `https://www.facebook.com/sharer?u=http://api.futbol8alem.com/shareResultF/${id}`;
+                     //window.location.href = `https://www.facebook.com/sharer?u=http://api.futbol-alem.com/shareResultF/${id}`;
 
                      //let image = response['Image'];
                      //console.log('image',image);

@@ -55,9 +55,9 @@ class MercadoPagoService extends Model
         $preference->items = array($item);
 
         $preference->back_urls = array(
-            "success" => "https://futbol8alem.com/#/payment/success",
-            "failure" => "https://futbol8alem.com/#/payment/failure",
-            "pending" => "https://futbol8alem.com/#/payment/pending"
+            "success" => "https://futbol-alem.com/#/payment/success",
+            "failure" => "https://futbol-alem.com/#/payment/failure",
+            "pending" => "https://futbol-alem.com/#/payment/pending"
         );
         $preference->auto_return = "approved";
 

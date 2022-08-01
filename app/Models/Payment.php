@@ -205,7 +205,7 @@ class Payment extends Model
             
 
             $payment->sendNotificationSuccess();
-            dd($payment);
+            //dd($payment);
             //Enviar Notificacion , email de pago 
         }
 
@@ -241,7 +241,7 @@ class Payment extends Model
             
 
             $payment->sendNotificationPending();
-            dd($payment);
+            //dd($payment);
             //Enviar Notificacion , email de pago 
         }
 

@@ -20,7 +20,7 @@ class PaymentController extends Controller
 
         Payment::success();
 
-        //header("Location: https://futbol-alem.com/#/payment/success");
+        header("Location: https://futbol-alem.com/#/payment/success");
         //die();
     }
 
@@ -30,17 +30,18 @@ class PaymentController extends Controller
         Log::debug('payment pending' , [ 'params' => json_encode( request()->all() )]);
         # code...
         Payment::pending();
-        //header("Location: https://futbol-alem.com/#/payment/pending");
-        //die();
+        header("Location: https://futbol-alem.com/#/payment/pending");
+        //die()
     }
 
     public function failure()
     {
         Log::alert('payment failure' , [ 'params' => json_encode( request()->all() )]);
+        header("Location: https://futbol-alem.com/#/payment/failure");
+
         # code...
         Payment::failure();
-        //header("Location: https://futbol-alem.com/#/payment/failure");
-        //die();
+       
     }
 
     public function paid(){

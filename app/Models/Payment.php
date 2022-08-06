@@ -56,9 +56,13 @@ class Payment extends Model
         'detail',
         'status',
         'team_id',
+        'plan_name',
+        'months',
         'created_at',
         'updated_at'
     ];
+
+    protected $appends = ['estado'];
 
     protected $with = ['team','user'];
     protected $guarded = [];
@@ -71,6 +75,28 @@ class Payment extends Model
 
     public function user(){
         return $this->belongsTo(User::class);
+    }
+
+    public function getEstadoAttribute(){
+        switch($this->status){
+            case "approved":
+                return 'aprobado';
+
+            case "failure":
+                return 'no Aprobado';
+
+            case "pending":
+                return 'pendiente';
+            
+            case "pending":
+                    return 'pendiente';
+            
+            case "created":
+                return 'pendiente de pago';
+
+            default :
+                return $this->status;
+        }
     }
    
 
@@ -94,12 +120,12 @@ class Payment extends Model
         $preference = new MercadoPago\Preference();
 
         $price = $plan['amount'];
-        $mounths = $plan['countMonths'] ;
+        $months = $plan['countMonths'] ;
         $plan_name = $plan['name'] ;
 
         // Crea un ítem en la preferencia
         $item = new MercadoPago\Item();
-        $item->title = 'Suscripción de  ' . $team->name . ' por ' . $mounths . ' meses';
+        $item->title = 'Suscripción de  ' . $team->name . ' por ' . $months . ' meses';
         $item->quantity = 1;
         $item->unit_price = $price;
         $item->currency_id = "ARS";
@@ -123,14 +149,14 @@ class Payment extends Model
 
         $dateStart = date('Y-m-d');
         
-        $dateEnd = date('Y-m-d', strtotime('+' . $mounths . ' months' ,  strtotime($dateStart) ) );
+        $dateEnd = date('Y-m-d', strtotime('+' . $months . ' months' ,  strtotime($dateStart) ) );
 
     
         $payment = Payment::create([
             'status' => 'created',
             'plan_name' => $plan_name,
             'amount' => $price,
-            'mounths' => $mounths,
+            'months' => $months,
             'preference_id' => $preference->id,
             'type' => 'START', 
             'team_id' => $team->id,
@@ -192,7 +218,7 @@ class Payment extends Model
             $payment->payment_json = json_encode($inputs);
 
             $date = Carbon::now();
-            $date_end = Carbon::now()->addMonth($payment->mounths);
+            $date_end = Carbon::now()->addMonths($payment->months);
 
             $payment->start = $date;
             $payment->end = $date_end;

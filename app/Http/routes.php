@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\AjaxPeticiones;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\FunctionsDeployController;
 use App\Models\Game;
+use Carbon\Carbon;
 use Symfony\Component\HttpKernel\DataCollector\AjaxDataCollector;
 use Intervention\Image\ImageCacheController;
 
@@ -24,19 +25,13 @@ Route::get('/', function () {
 
 Route::any('/prueba', function () {
 
-    $dateGame = \Carbon\Carbon::createFromFormat('Y-m-d', '2022-5-13');
-    
-    $game = new Game([
-        'date' => $dateGame
-    ]);
-    //$game->date = $dateGame;
 
-    return  $game->isFirstSaturday() ? 'Se juega el proximo sabado' : 'No se juega el prodimo sabado';
-    //$from = \Carbon\Carbon::now();
+    $ret = [
+        "hoy" =>  Carbon::now(),
+        "dentro de un ses sera" =>  Carbon::now()->addMonths(1)
+    ];
 
-    //return $to >= $from ? 'true' : 'false';
-
-    return date('d - m - Y',strtotime('next wednesday'));
+    dd($ret);
 });
 
 

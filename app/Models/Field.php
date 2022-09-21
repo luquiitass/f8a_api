@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\TraitCategory;
 use Carbon\Carbon;
 use DB;
 use Exception;
@@ -13,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Field extends Model
 {
+    use TraitCategory;
 
     protected $table = 'fields';
 
@@ -22,7 +24,8 @@ class Field extends Model
         'name',
         'lat',
         'lng',
-        'team_id'
+        'team_id',
+        'category_id'
     ];
 
 
@@ -34,6 +37,8 @@ class Field extends Model
 
     public static function create(array $attributes = [])
     {
+
+        $attributes['category_id'] =  parent::getCategoryId() ;
        
         $model = parent::create($attributes);       
 
@@ -49,12 +54,14 @@ class Field extends Model
     }
 
     public function pageAllFields(){
-        return parent::get();
+        return parent::where("category_id", $this->getCategoryId() )
+                       ->get();
     }
 
 
     public function markers(){
-        return $this->where('lat','!=',0)
+        return $this->where("category_id", $this->getCategoryId())
+                    ->where('lat','!=',0)
                     ->where('lng','!=',0)            
                     ->get();
     }

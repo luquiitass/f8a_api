@@ -129,7 +129,7 @@ class Game extends Model
         //parent::messagingFaforitesCreateGame($model->team_v);
 
         //if($model->isNextSaturday())
-        $model->messagingNewGame();
+        //$model->messagingNewGame();
 
         return  $model;
     }

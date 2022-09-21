@@ -66,7 +66,7 @@ class Publication extends Model
         $model->likes_count = $model->likes->count();
         $model->liked;
 
-        $model->notificationAllUsers();
+        //$model->notificationAllUsers();
 
         return $model;
     }

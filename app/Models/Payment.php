@@ -235,6 +235,7 @@ class Payment extends Model
             //Enviar Notificacion , email de pago 
         }
 
+        return $payment;
 
     }
 
@@ -271,6 +272,7 @@ class Payment extends Model
             //Enviar Notificacion , email de pago 
         }
 
+        return $payment;
 
     }
 
@@ -305,6 +307,8 @@ class Payment extends Model
             //dd($payment);
             //Enviar Notificacion , email de pago 
         }
+
+        return $payment;
 
 
     }

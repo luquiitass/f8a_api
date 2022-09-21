@@ -125,7 +125,7 @@ class Payment extends Model
 
         // Crea un ítem en la preferencia
         $item = new MercadoPago\Item();
-        $item->title = 'Suscripción de  ' . $team->name . ' por ' . $months . ' meses';
+        $item->title = 'Suscripción de  ' . $team->name . ' por ' . $months . ' meses.';
         $item->quantity = 1;
         $item->unit_price = $price;
         $item->currency_id = "ARS";
@@ -160,7 +160,7 @@ class Payment extends Model
             'preference_id' => $preference->id,
             'type' => 'START', 
             'team_id' => $team->id,
-            'detail' => 'Pago por suscripción de un Equipo',
+            'detail' => 'Pago por suscripción de un Equipo valido desde ' . $dateStart . ' a ' . $dateEnd,
             'start' => $dateStart,
             'end' => $dateEnd,
             'preference_json' => json_encode($preference),

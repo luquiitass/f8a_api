@@ -18,10 +18,10 @@ class Payment extends Model
     const PLANS = array(
         1 => [
             "id" => 1,
-            "name" => '2 Meses',
+            "name" => '1 Meses',
             "info" => 'El pago sera por dos meses',
-            "countMonths" => 2,
-            "amount" => 300,
+            "countMonths" => 1,
+            "amount" => 15,
         ],
         2 => [
             "id" => 2,

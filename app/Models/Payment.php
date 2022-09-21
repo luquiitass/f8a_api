@@ -18,10 +18,10 @@ class Payment extends Model
     const PLANS = array(
         1 => [
             "id" => 1,
-            "name" => '1 Meses',
+            "name" => '2 Meses',
             "info" => 'El pago sera por dos meses',
-            "countMonths" => 1,
-            "amount" => 15,
+            "countMonths" => 2,
+            "amount" => 10,
         ],
         2 => [
             "id" => 2,
@@ -114,7 +114,7 @@ class Payment extends Model
 
     public function createPayment($user, Team $team, $plan ){
 
-        MercadoPago\SDK::setAccessToken(config('services.mp.private_key'));
+        MercadoPago\SDK::setAccessToken(config('services.mp.private_key_test'));
 
         // Crea un objeto de preferencia
         $preference = new MercadoPago\Preference();
@@ -125,7 +125,7 @@ class Payment extends Model
 
         // Crea un ítem en la preferencia
         $item = new MercadoPago\Item();
-        $item->title = 'Suscripción de  ' . $team->name . ' por ' . $months . ' meses.';
+        $item->title = 'Suscripción de  ' . $team->name . ' por ' . $months . ' meses';
         $item->quantity = 1;
         $item->unit_price = $price;
         $item->currency_id = "ARS";
@@ -160,7 +160,7 @@ class Payment extends Model
             'preference_id' => $preference->id,
             'type' => 'START', 
             'team_id' => $team->id,
-            'detail' => 'Pago por suscripción de un Equipo valido desde ' . $dateStart . ' a ' . $dateEnd,
+            'detail' => 'Pago por suscripción de un Equipo',
             'start' => $dateStart,
             'end' => $dateEnd,
             'preference_json' => json_encode($preference),
@@ -235,8 +235,6 @@ class Payment extends Model
             //Enviar Notificacion , email de pago 
         }
 
-        return $payment;
-
 
     }
 
@@ -273,8 +271,6 @@ class Payment extends Model
             //Enviar Notificacion , email de pago 
         }
 
-        return $payment;
-
 
     }
 
@@ -309,8 +305,6 @@ class Payment extends Model
             //dd($payment);
             //Enviar Notificacion , email de pago 
         }
-
-        return $payment;
 
 
     }

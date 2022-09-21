@@ -18,9 +18,9 @@ class PaymentController extends Controller
         Log::debug('payment success' , [ 'params' => json_encode( request()->all() )]);
         # code...
 
-        Payment::success();
+        $payment = Payment::success();
 
-        header("Location: https://futbol-alem.com/#/payment/success");
+        header("Location: https://futbol-alem.com/#/payment/" . $payment ? $payment->id : "0");
         //die();
     }
 
@@ -29,18 +29,21 @@ class PaymentController extends Controller
     {
         Log::debug('payment pending' , [ 'params' => json_encode( request()->all() )]);
         # code...
-        Payment::pending();
-        header("Location: https://futbol-alem.com/#/payment/pending");
+        $payment = Payment::pending();
+        
+        header("Location: https://futbol-alem.com/#/payment/" . $payment ? $payment->id : "0");
         //die()
     }
 
     public function failure()
     {
         Log::alert('payment failure' , [ 'params' => json_encode( request()->all() )]);
-        header("Location: https://futbol-alem.com/#/payment/failure");
+        
+        $payment = Payment::failure();
+        
+        header("Location: https://futbol-alem.com/#/payment/" . $payment ? $payment->id : "0");
 
         # code...
-        Payment::failure();
        
     }
 

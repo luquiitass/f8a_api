@@ -20,8 +20,12 @@ class PaymentController extends Controller
 
         $payment = Payment::success();
 
-        header("Location: https://futbol-alem.com/#/payment/" . $payment ? $payment->id : "0");
-        //die();
+        $id = empty($payment) ? "0" : $payment->id ;
+
+        $url = "https://futbol-alem.com/#/payment/" . $id ;
+
+        header('Location: ' . $url , true);
+        exit();
     }
 
 
@@ -31,7 +35,13 @@ class PaymentController extends Controller
         # code...
         $payment = Payment::pending();
         
-        header("Location: https://futbol-alem.com/#/payment/" . $payment ? $payment->id : "0");
+       
+        $id = empty($payment) ? "0" : $payment->id ;
+
+        $url = "https://futbol-alem.com/#/payment/" . $id ;
+
+        header('Location: ' . $url , true);
+        exit();
         //die()
     }
 
@@ -41,7 +51,13 @@ class PaymentController extends Controller
         
         $payment = Payment::failure();
         
-        header("Location: https://futbol-alem.com/#/payment/" . $payment ? $payment->id : "0");
+        
+        $id = empty($payment) ? "0" : $payment->id ;
+
+        $url = "https://futbol-alem.com/#/payment/" . $id ;
+
+        header('Location: ' . $url , true);
+        exit();
 
         # code...
        

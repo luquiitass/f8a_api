@@ -206,6 +206,10 @@ class Payment extends Model
 
     public static  function success(){
 
+        if(! request()->has('preference_id')){
+            return null;
+        }
+
         $inputs = request()->all();
 
         $payment = self::where('preference_id',$inputs['preference_id'])->first();
@@ -241,6 +245,10 @@ class Payment extends Model
 
 
     public static  function pending(){
+
+        if(! request()->has('preference_id')){
+            return null;
+        }
 
         $inputs = request()->all();
 
@@ -278,9 +286,12 @@ class Payment extends Model
 
     public static  function failure(){
 
+        if(! request()->has('preference_id')){
+            return null;
+        }
+
         $inputs = request()->all();
 
-        //dd($inputs);
 
         $payment = self::where('preference_id',$inputs['preference_id'])->first();
 

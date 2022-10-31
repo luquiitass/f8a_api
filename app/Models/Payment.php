@@ -18,23 +18,23 @@ class Payment extends Model
     const PLANS = array(
         1 => [
             "id" => 1,
-            "name" => '2 Meses',
-            "info" => 'El pago sera por dos meses',
-            "countMonths" => 2,
-            "amount" => 10,
+            "name" => '1 Mes',
+            "info" => 'El pago sera por un mes',
+            "countMonths" => 1,
+            "amount" => 400,
         ],
         2 => [
-            "id" => 2,
-            "name" => '6 Meses',
-            "info" => 'El pago sera por 6 meses',
-            "countMonths" => 6,
+            "id" => 3,
+            "name" => '3 Meses',
+            "info" => 'El pago sera por 3 meses',
+            "countMonths" => 3,
             "amount" => 600,
         ],
         3 => [
-            "id" => 3,
-            "name" => '12 Meses',
-            "info" => 'El pago sera por un año',
-            "countMonths" => 12,
+            "id" => 6,
+            "name" => '6 Meses',
+            "info" => 'El pago sera por 6 meses',
+            "countMonths" => 6,
             "amount" => 1000,
         ]
         );
@@ -114,7 +114,8 @@ class Payment extends Model
 
     public function createPayment($user, Team $team, $plan ){
 
-        MercadoPago\SDK::setAccessToken(config('services.mp.private_key_test'));
+        
+        MercadoPago\SDK::setAccessToken(config('services.mp.private_key'));
 
         // Crea un objeto de preferencia
         $preference = new MercadoPago\Preference();
@@ -322,6 +323,13 @@ class Payment extends Model
         return $payment;
 
 
+    }
+
+
+    public function pagePayments()
+    {
+        return  $this->get();
+        # code...
     }
 
 

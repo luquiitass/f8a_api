@@ -401,7 +401,7 @@ class Game extends Model
                 //->where('date', '>=' ,$dateInit)
                 //->where('date', '<=' ,$dateEnd)
                 ->groupBy('date')
-                ->orderBy('date')
+                ->orderBy('date','desc')
                 ->get();
 
         

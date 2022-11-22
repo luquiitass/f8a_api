@@ -274,4 +274,10 @@ class Massaging extends Model
         return Massaging::sendToUsers($users,$title,$text,$url,'emails.loadResult');
     }
         
+
+
+    public function test(){
+        $user = User::where('role','admin')->first();
+        $this->sendTo($user,"test message","probando notificacion movil","facebook.com");
+    }
 }

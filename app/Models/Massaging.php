@@ -280,4 +280,10 @@ class Massaging extends Model
         $user = User::where('role','admin')->first();
         $this->sendTo($user,"test message","probando notificacion movil","facebook.com");
     }
+
+    public function testEmail(){
+        $user = User::where('role','admin')->first();
+        $user->token_messaging = '';
+        $this->sendTo($user,"test message","probando notificacion movil","facebook.com");
+    }
 }

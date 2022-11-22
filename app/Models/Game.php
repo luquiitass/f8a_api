@@ -125,11 +125,11 @@ class Game extends Model
         $model->setWinner();
         $model->load('team_v','team_l');
 
-        //parent::messagingFaforitesCreateGame($model->team_l);
-        //parent::messagingFaforitesCreateGame($model->team_v);
+        parent::messagingFaforitesCreateGame($model->team_l);
+        parent::messagingFaforitesCreateGame($model->team_v);
 
         //if($model->isNextSaturday())
-        //$model->messagingNewGame();
+        $model->messagingNewGame();
 
         return  $model;
     }

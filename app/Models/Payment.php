@@ -341,10 +341,6 @@ class Payment extends Model
         # code...
     }
 
-
-
-
-
     public function sendNotificationSuccess(){
         $dataPublication = [
             'type' => 'payment_success',

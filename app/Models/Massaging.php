@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use App;
+use App\Jobs\ProcessNotifications;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Log;
 use stdClass;
 
@@ -13,7 +15,9 @@ use stdClass;
 class Massaging extends Model
 {
 
-    protected $table = 'messaging';
+    use DispatchesJobs;
+
+    //protected $table = 'messaging';
 
     public $timestamps = true;
 
@@ -76,7 +80,7 @@ class Massaging extends Model
 
         foreach($users as $user){
             if(! empty($user->token_messaging)){
-                $ret = $this->send($title,$text,$user->token_messaging);
+                $ret = self::sendTo($user,$title,$text,$user->token_messaging);
                 $data[] = [
                     'user' => $user->completeName,
                     'result' => $ret 
@@ -106,67 +110,19 @@ class Massaging extends Model
     }
     
     public static function sendTo($user ,$title,$text,$goTo,$viewEmail = 'default'){
-        $result = null;
-        if(! empty($user->token_messaging)){
-            $result  = parent::send($title,$text, $user->token_messaging,$goTo);
-        }
+        
+        $message = new Message();
+        $message->set($user,$title,$text,$goTo,$viewEmail);
 
-        if(($result == null || $result->success == 0) && $viewEmail != 'noEmail'){
-            Log::alert('No tiene token o no ha sido enviada correctamente la notificación');
-            return self::sendEmail($viewEmail,$user,$title,$text,$goTo);
-        }
+        $job = new ProcessNotifications($message);
+        
+        //$job->onQueue('default');
 
-        return $result;
-    }
-
-    public function send($title,$text,$token_messaging,$goTo = 'https://futbol-alem.com/#/home/results'){
-        $key_app = 'AAAAWNgS9bw:APA91bEsCRBb0Gj4_uKG91K_yDwvMEnkof0nuxKRrnzvfx0SIPTbgHF6fskBRLrSjZ4X34zCebY0Pbo7BfziX1qgDGJ0titxBBILxQfr8VI-iC9mdKXElHWekyoVlNvaUwP9rMK_Fr8h' ; // get API access key from Google/Firebase API's Console
-
-        //$registrationIds = array( 'cyMSGTKBzwU:APA91...xMKgjgN32WfoJY6mI' ); //Replace this with your device token
-
-
-        // Modify custom payload here
-        $notification = array
-        (
-                'title'     => $title,
-                'body'         => $text,
-                'icon'=>'https://futbol-alem.com/assets/icon/favicon.png',
-                'click_action'=>$goTo
-        );
-
-        $data = [
-            'info' => ''
-        ];
-
-        $fields = array
-        (
-            'notification'      => $notification,
-            'data'              => $data,
-            'to'                =>$token_messaging
-        );
-
-        $headers = array
-        (
-            'Authorization: key=' . $key_app,
-            'Content-Type: application/json'
-        );
-
-        //echo json_encode($fields);
-        //echo '<br>';
-
-        $ch = curl_init();
-        curl_setopt( $ch,CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send' ); //For firebase, use https://fcm.googleapis.com/fcm/send
-
-        curl_setopt( $ch,CURLOPT_POST, true );
-        curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
-        curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
-        curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
-        curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
-        $result = curl_exec($ch );
-        curl_close( $ch );
-        return json_decode( $result );
+        dispatch($job);
 
     }
+
+  
 
     public function loadedResults(){
         $users = $this->allUsers();
@@ -191,23 +147,6 @@ class Massaging extends Model
         return $data;
     }
 
-    public static function sendEmail($view ,$user,$subject,$text,$goTo){
-
-        $email = new Email();
-        $ob = new stdClass();
-
-
-        if($view == 'default'){
-            Log::alert('Enviando email por defecto (text)');
-
-            $ob->success =  $email->sendText($text,$user,$subject);
-        }else{
-            Log::alert('enviando email personalizado');
-
-            $ob->success =  $email->send($view,["text" => $text, "goTo"=>$goTo],$user,$subject);
-        }
-        return $ob;
-    }
 
     public function showGamesLoaded(){
         $users = $this->allUsers();
